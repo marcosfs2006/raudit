@@ -7,5 +7,14 @@ categories: []
 tags: []
 ---
 
-this is a test post
+
+You guessed. :) This is a test post. 
+
+
+```{r}
+library(tidyverse)
+mtcars %>% 
+  ggplot(aes(mpg, hp, color = as.factor(gear))) +
+  geom_point(show.legend = FALSE)
+```
 

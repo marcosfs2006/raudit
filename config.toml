@@ -1,10 +1,12 @@
-baseurl = "/"
+baseurl = "https://raudit.netlify.com/"
 languageCode = "en-us"
 title = "RAudit Solution LLP"
 theme = "hugo-lithium"
 googleAnalytics = ""
 disqusShortname = ""
+
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+paginate = 3
 
 [permalinks]
     post = "/:year/:month/:day/:slug/"
@@ -54,4 +56,20 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     width = 50
     height = 50
     alt = "Logo"  
+    
+    footer = "&copy; [RAudit Solution LLP](https://rauditsolution.netlify.com/) 2019"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
