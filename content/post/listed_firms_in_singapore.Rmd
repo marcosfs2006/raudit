@@ -1,0 +1,215 @@
+---
+title: "Listed companies in Singapore"
+author: "Stewart Li"
+date: "8/6/2019"
+output:
+  html_document:
+    code_folding: hide
+    highlight: textmate
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE, 
+                      fig.width = 8, fig.height = 6)
+
+library(tidyverse)
+library(scales)
+library(glue)
+
+theme_set(theme_light() +
+             theme(plot.caption = element_text(size = 9, color = "gray50")))
+```
+
+
+### Data collection
+
+
+*by_name_data [^1]*
+
+
+```{r}
+library(rvest)
+
+by_name_url <- "https://sginvestors.io/sgx/stock-listing/alpha"
+
+by_name_html <- read_html(by_name_url) %>% 
+  html_nodes(".stockitem > a") 
+  
+by_name <- tibble(firm = html_attr(by_name_html, "title"), 
+                  link = html_attr(by_name_html, "href")) %>% 
+  mutate(firm = str_remove(firm, "\\@.*"), 
+         name = str_replace(firm, "\\(SGX.*\\)", ""), 
+         code = sub("\\).*", "", sub(".*\\(", "", firm)), 
+         code = str_replace_all(code, "\\(|\\)", "")) %>% 
+  mutate(code = gsub(" ", "", code))
+```
+
+
+*by_sector data*
+
+
+```{r}
+by_sector_url <- "https://sginvestors.io/sgx/stock-listing/sector"
+
+by_sector_html <- read_html(by_sector_url) %>% 
+  html_nodes(".stockitem > a") 
+
+by_sector <- tibble(firm_number = seq(1, 699, 1),
+                    firm = html_attr(by_sector_html, "title"), 
+                    link = html_attr(by_sector_html, "href")) %>% 
+  mutate(sector = case_when(firm_number >=1 & firm_number <= 18 ~ "Communication Services", 
+                            firm_number >=19 & firm_number <= 121 ~ "Consumer Discretionary", 
+                            firm_number >=122 & firm_number <= 163 ~ "Consumer Staples", 
+                            firm_number >=164 & firm_number <= 214 ~ "Energy", 
+                            firm_number >=215 & firm_number <= 248 ~ "Financials", 
+                            firm_number >=249 & firm_number <= 282 ~ "Health Care", 
+                            firm_number >=283 & firm_number <= 506 ~ "Industrials", 
+                            firm_number >=507 & firm_number <= 571 ~ "Information Technology", 
+                            firm_number >=572 & firm_number <= 616 ~ "Materials", 
+                            firm_number >=617 & firm_number <= 689 ~ "Real Estate",
+                            firm_number >=690 & firm_number <= 699 ~ "Utilities")) %>% 
+  mutate(firm = str_remove(firm, "\\@.*"))
+```
+
+
+*sti data [^2]*
+
+
+```{r}
+sti_url <- "https://en.wikipedia.org/wiki/Straits_Times_Index"
+
+sti_html <- read_html(sti_url) %>% 
+  html_node("h2~ p+ table td > table") 
+
+sti <- sti_html %>% 
+  html_table() %>% 
+  tbl_df() %>% 
+  rename(code = 1) %>% 
+  mutate(code = gsub(" ", "", code), 
+         sti = "Yes") %>% 
+  select(code, sti)
+```
+
+
+*joint dataset*
+
+
+```{r}
+sg_firm <-  by_name %>% 
+  left_join(sti, by = "code") %>% 
+  right_join(by_sector, by = c("firm", "link")) %>% 
+  mutate(sti = ifelse(is.na(sti), "No", sti)) %>% 
+  select(firm_number, firm, name, code, sector, sti, link) 
+```
+
+
+<br>
+
+
+### Data table
+
+
+```{r}
+library(crosstalk)
+library(plotly)
+
+tx <- sg_firm %>% highlight_key()
+
+dt <- DT::datatable(tx, rownames = FALSE, filter = "top",
+                    caption = 'Table 1: The list of Singapore listed companies as of 8/8/2019', 
+                    extensions = 'Buttons', 
+                    options = list(dom = 'Bfrtip',
+                                   buttons = list('copy', 'print', 
+                                                  list(extend = 'collection',
+                                                       buttons = c('csv', 'excel', 'pdf'),
+                                                       text = 'Download')))) %>% 
+  DT::formatStyle(columns = c(1:7), fontSize = "8pt")
+
+widgets <- bscols(
+  widths = c(12, 12, 12),
+  filter_checkbox("sector", "Sectors", tx, ~sector, inline = FALSE, columns = 1))
+
+crosstalk::bscols(widgets, 
+                  dt, 
+                  widths = c(2, 10))   
+```
+
+
+<br>
+
+
+### Data visualization
+
+
+```{r}
+library(gridExtra)
+
+mytable <- sg_firm %>% 
+  group_by(STI = sti) %>% 
+  summarise(Firms = n())
+
+sg_firm %>% 
+  group_by(sti, sector) %>% 
+  summarise(n = n()) %>% 
+  ungroup() %>% 
+  mutate(sector = fct_reorder(sector, n, sum)) %>% 
+  ggplot(aes(sector, n, fill = sti)) +
+  geom_col(key_glyph = draw_key_crossbar) +
+  geom_text(aes(label = n), hjust = 1, size = 3) +
+  coord_flip() +
+  annotation_custom(tableGrob(mytable, 
+                              rows = NULL, 
+                              theme = ttheme_minimal(base_size = 9)), 
+                    xmin = 1.5, xmax = 2, ymin = 180, ymax = 240) +
+  theme(legend.title = element_blank(), 
+        legend.text = element_blank(),
+        legend.background = element_blank(),
+        legend.justification=c(1,0), 
+        legend.position=c(0.865, 0.025),
+        legend.direction='vertical') +
+  labs(title = "Singapore listed firms by sectors", 
+       subtitle = glue("Total {range(sg_firm$firm_number)[2]} firms as of 8/8/2019"),  
+       x = "", 
+       y = "", 
+       caption = "RAudit Solution LLP | Stewart Li")
+```
+
+
+
+```{r}
+sg_firm %>% 
+  count(sti, sector) %>% 
+  group_by(sti) %>% 
+  mutate(pct = n / sum(n)) %>% 
+  ungroup() %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(sector = fct_reorder(sector, n, sum)) %>% 
+  ggplot(aes(sector, pct)) +
+  geom_col() +
+  geom_text(aes(label = n), hjust = 0, size = 3) +
+  geom_curve(aes(x = 3, y = .20, xend = 3, yend = .16),
+               arrow = arrow(length = unit(0.08, "inch")), size = 0.5,
+               color = "gray20", curvature = 0.3) + 
+  geom_curve(aes(x = 2, y = .20, xend = 2, yend = .16),
+               arrow = arrow(length = unit(0.08, "inch")), size = 0.5,
+               color = "gray20", curvature = 0.3) + 
+  coord_flip() +
+  scale_y_continuous(labels = percent_format()) +
+  facet_wrap(~paste0("STI: ", sti), nrow = 1) +
+  labs(title = "Is there any concentration risk?", 
+       subtitle = "Relatively more firms from financial and communication sectors are included in STI", 
+       x = "", 
+       y = "", 
+       caption = "RAudit Solution LLP | Stewart Li")
+```
+
+
+
+[^1]: Get data from [sginvestors](https://sginvestors.io/sgx/stock-listing/alpha). 
+[^2]: Get data from [wikipedia](https://en.wikipedia.org/wiki/Straits_Times_Index). 
+
+
+
+
+
