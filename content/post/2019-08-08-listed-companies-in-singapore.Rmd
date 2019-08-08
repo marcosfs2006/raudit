@@ -1,16 +1,15 @@
 ---
-title: "Listed companies in Singapore"
-author: "Stewart Li"
-date: "8/6/2019"
-output:
-  html_document:
-    code_folding: hide
-    highlight: textmate
+title: Listed companies in Singapore
+author: Stewart Li
+date: '2019-08-08'
+slug: listed-companies-in-singapore
+categories: []
+tags: []
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = FALSE, 
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, 
                       fig.width = 8, fig.height = 6)
 
 library(tidyverse)
@@ -22,7 +21,8 @@ theme_set(theme_light() +
 ```
 
 
-### Data collection
+
+**Data collection**
 
 
 *by_name_data [^1]*
@@ -104,17 +104,15 @@ sg_firm <-  by_name %>%
 ```
 
 
-<br>
+
+**Data table**
 
 
-### Data table
-
-
-```{r}
+```{r include=FALSE}
 library(crosstalk)
 library(plotly)
 
-tx <- sg_firm %>% highlight_key()
+tx <- sg_firm[3:7] %>% highlight_key()
 
 dt <- DT::datatable(tx, rownames = FALSE, filter = "top",
                     caption = 'Table 1: The list of Singapore listed companies as of 8/8/2019', 
@@ -127,19 +125,16 @@ dt <- DT::datatable(tx, rownames = FALSE, filter = "top",
   DT::formatStyle(columns = c(1:7), fontSize = "8pt")
 
 widgets <- bscols(
-  widths = c(12, 12, 12),
+  widths = c(10, 10, 10),
   filter_checkbox("sector", "Sectors", tx, ~sector, inline = FALSE, columns = 1))
 
 crosstalk::bscols(widgets, 
                   dt, 
-                  widths = c(2, 10))   
+                  widths = c(3, 6))   
 ```
 
 
-<br>
-
-
-### Data visualization
+**Data visualization**
 
 
 ```{r}
@@ -206,8 +201,18 @@ sg_firm %>%
 
 
 
+Codes and the data table will be available on [RPubs](https://rpubs.com/Stewartli) soon. You can get the list from there. 
+
+
+
 [^1]: Get data from [sginvestors](https://sginvestors.io/sgx/stock-listing/alpha). 
 [^2]: Get data from [wikipedia](https://en.wikipedia.org/wiki/Straits_Times_Index). 
+
+
+```{r include=FALSE}
+knitr::knit_exit()
+```
+
 
 
 
