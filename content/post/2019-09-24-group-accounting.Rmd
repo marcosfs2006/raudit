@@ -1,0 +1,247 @@
+---
+title: Group Accounting
+author: ''
+date: '2019-09-24'
+slug: group-accounting
+categories: []
+tags: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.align = "center", fig.width = 4, fig.height = 3)
+
+library(tidyverse)
+library(ggdag)
+```
+
+
+**What do you purchase (Asset vs Business)?**
+
+
+FRS 103(R) Business Combinations determines if an acquired set of activities and assets is a business;   
+
+* A business includes an input and a substantive process that together significantly contribute to the **ability** to create output. e.g. special knowledge and skills, (unlike operating pools in real estate, shipping industry).
+* Optional fair values concentration test: concentrated in a single or a group of similar identifiable asset.
+
+
+Different accounting treatments accordingly;
+
+* An asset: subject to impairment test.
+* A business: is required to perform purchase price allocation during the consolidation process.
+
+
+**Do you have control?**
+
+
+FRS 110 determines the control concept;
+
+* Power over the decision-making of relevant process and activities
+* Returns
+* Combination of power and returns (principal vs agent)
+
+
+Powers -> Substantial rights -> Voting;
+
+* Majority voting rights
+* Contractual arrangements (among investors)
+* Potential voting rights (options regardless of managment intention)
+* De facto control (many minority investors)
+* Purpose and designed SPV (expectation and motivation)
+* Proof of the power of disposal (run BOD regardless of voting)
+
+
+Substantial rights;
+
+* Not protective
+* Possibility of exercising (timing and feasibility)
+
+
+**Am I exempted from consolidation?**
+
+
+* Immaterial entities
+* Subsidiaries recorded at FVTPL
+
+
+**How to consolidate?**
+
+
+Consolidation process;
+
+* Convert local GAAP to IFRS in a single financial statements in terms of Recognition, Measurement, and Presentation.
+* Align financial year end (a same reporting date or **within 3 months**)
+* Currency translation (BS: close rate, PL: average rate, Equity: historical rate, translation reserve, OCI)
+* Consolidation forms.
+* Change consolidation levels (stepup acquisition or disposal)
+* Intra-group transactions (IFRS: buyer tax rate, US: seller tax rate)
+
+
+Consolidation forms;
+
+* FRS 109: AFS at cost
+* FRS 111 JO: Give parties **rights to specific** assets and obligations
+* FRS 28(R) JV: Establish a seperate vehicle via the joint arrangement (no direct access to its assets)
+* FRS 28(R) Associate: Significant influence, proportional consoldiation
+* FRS 110 Subsidiries: Control, 100% consolidation
+* FRS 105 Discontinued Operations: 
+
+
+Purchase price (include both condideration and others, list others as follows);
+
+* Transaction cost (DR: Expense, CR: Investment, not directly attributable to the acquisition)
+* Contingent payments relating to post-acquisition
+* Indemnification assets (due dilligence risk such as lawsuit, DR: Assets, CR: Provision)
+* Pre-existing relationships (supplier contracts)
+* Re-acquired rights (distribution rights)
+* Leasing contracts
+* Deferred tax
+
+
+A faces a loss or penalty due to the **contract** with B. A intends to acquire B to imporve its financial position.
+
+* Settlement is not done to obtain control over B upon acquisition (settlement recorded in P/L).
+* Pre-existing relationships become an inter-company relationship, and is eliminated upon acquisition (must remove).
+* Acquisition consideration = price - settlement (impact on goodwill)
+
+
+A granted an exclusive **disribution right** to B (franchise). 
+
+* The re-acquired right is treated as IA.
+* Settlement in P/L: lower of unfavourable component (6/10 new right vs 6/10 old right) and termination penalty
+* Difference (unfavourable component vs termination penalty) is treated as goodwill
+* Acquisition consideration includes IA and goodwill.
+
+
+```{r}
+dagify(B ~ A,
+       exposure = "A",
+       outcome = "A") %>% 
+  tidy_dagitty() %>% 
+  ggdag() +
+  theme_dag()
+```
+
+
+Purchase price allocation (Consideration);
+
+* Cash
+* Shares
+* Previous interest
+* NCI
+* Fair value of assets (deferred tax)
+* Contigent consideration (Earn-out (Yes): Future, Indemnification (No): Past)
+* Goodwill
+
+
+Earn-out contingent consideration;
+
+* Cash settlement: libility at FV (must be included in group FS, FV based on probabilities, movement recoded in P/L)
+* Sahre settlement: initially recorded at FV, subsequently equity without remeasurement.
+
+
+Share-based payment;
+
+* Share acquisition: A part of purchase consideration
+* Share incentive: Post-acquisition expenses
+* Replace the exisiting plan (Payment vs Vested, <= Consideration, > P/L as post-combination cost)
+
+
+**How much to consolidate?**
+
+
+Joint operation;
+
+* % profit sharing in contracts
+* line-by-line accounting based on %
+* intra group transactions elimination
+
+
+Joint venture;
+
+* Equity accounting: Investment (dividend, profit), FV assets (depreciation, tax), contingent liabilities, goodwill (impariment).
+
+
+Associates;
+
+* Equity accounting
+
+
+If B, C, D have a joint agreement, C has to prepares using equity accounting too.
+
+
+```{r}
+dagify(x ~ a30,
+       x ~ b25,
+       x ~ c15,
+       x ~ d30,
+       exposure = "x",
+       outcome = "x") %>% 
+  tidy_dagitty() %>% 
+  ggdag() +
+  theme_dag()
+```
+
+
+Subsidiries;
+
+* Previously held interest is not remeasured **until** it becomes a subsidiary 
+* AFS to Associate (Dr: Current investment, Cr: Previous equity, Cr: Cash)
+* Associate to Subsidiary (DR: Investment, Cr: P/L, as if sell buy back, then consolidation allocation).
+* Same treatment in the case of disposal.
+
+
+If Co issues FG to the Bank, Co still has risks and rewards. Thus, Co has to consolidate SPV with 100% NCI. 
+
+
+```{r}
+dagify(SPV ~~ Co,
+       SPV ~ Bank,
+       Bank ~ Co,
+       exposure = "SPV",
+       outcome = "SPV") %>% 
+  tidy_dagitty() %>% 
+  ggdag() +
+  theme_dag()
+```
+
+
+Loss of control after partial disposal;
+
+* AFS reserve recycles to P/L (a part of disposal gain)
+* Revaluation reserve recycles to R/E (not disposal gain)
+* Accounting treatment should be same (recognize a full gain).
+
+
+```{r}
+dagify(X100 ~ A,
+       Y ~ A,
+       Y ~ B60,
+       exposure = "Y",
+       outcome = "X100") %>% 
+  tidy_dagitty() %>% 
+  ggdag() +
+  theme_dag()
+```
+
+
+```{r}
+dagify(Y ~ X100,
+       Y ~ A,
+       Y ~ B60,
+       exposure = "Y",
+       outcome = "X100") %>% 
+  tidy_dagitty() %>% 
+  ggdag() +
+  theme_dag()
+```
+
+
+
+To read more, please refer to [2017 Under control Applying IFRS 10](https://www.grantthornton.global/en/insights/articles/under-control-applying-ifrs-10/)
+
+
+
+
+
+
