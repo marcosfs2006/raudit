@@ -1,0 +1,213 @@
+---
+title: Fraud Auditors
+author: ''
+date: '2019-09-26'
+slug: fraud-auditors
+categories: []
+tags: []
+---
+
+
+### Frauds
+
+
+Fraud elements; 
+
+* Materiality
+* Representation is knowingly false
+* Reasonably placed reliance on the representation by someone else
+* Result in financial damages
+
+
+DOJ defines illegally activities;
+
+* Obscure invesigations
+* Inside dealings
+* Accounting fraud (aka occupational fraud)
+
+
+Obscure invesigations;
+
+* Delete computer files
+* Shred, alter, refuse to provide documents
+* Bribery 
+
+
+Inside dealings: 
+
+* Bids
+* Executive loans
+* Share trading
+
+
+Accounting frauds reported by ACFE;
+
+* Asset misappropriations
+* Corruptions
+* Fraudulent financial reportings (Sales/AR + Payment/AP + Payroll/T&E)
+
+
+Position of fraud auditors;
+
+* Internal and External auditing: risk assessment, internal control, COSO, SOX 2002, ISACA,
+* Fraud auditor: red flags, detection, data analytics,
+* Forensic accountants: known facts, confess/witness, FCPA,
+
+
+
+### Fraud risk assessment SAS99
+
+
+Enterprise risk management;
+
+* Business risk: Objective (startup going concern issue, IPO), activity process, 
+* Inherent risk: Industry issues, 
+* Management risk: Risk appetite, 
+
+
+Fraud triangle/Fraud diamond;
+
+* Pressure: incentive, life style, 
+* Opportunity: weak internal control
+* Rationalization: personal feeling
+
+
+Internal controls SAS78;
+
+* Whitstlebower system: tips from suppleirs and customers
+* Duty segregation 
+* Sudden internal process changes (accounting circle)
+* Don't exercise stipulated controls (approved suppliers list)
+
+
+Red flags of transactions;
+
+* Timing: frequency
+* Amount: too much, same amount, round numbers, below limit, 
+* Counterparties: unknown
+* Voided checks: no explanation
+* Insufficient supervision: signature
+* Adjustment to accounts: pattern
+* Vendors: same vendors' names with different address, one of customers,
+
+
+Level of audit risk;
+
+* CR + IR + DR = AR
+* Audit assertions: completeness, existence, 
+
+
+
+### Asset misappropriations
+
+
+Cash;
+
+* Theft, embezzlement
+* Skimming: unrecorded cash sales
+* Larceny: steal before deposited to the bank
+* Billing: shell company
+* Check tampering: intercept outgoing checks (pre-signed checks)
+
+
+Inventories;
+
+* Theft
+* Weight of inventories 
+* Damaged good returned vs purchases (quanlity measurement)
+* Defect sold products as inventories
+
+
+Payroll;
+
+* Ghost staffs (staff count, starter vs leaver)
+* Falsified work hours
+* Commission computation
+
+
+T&E;
+
+* Personal expenses
+* Inflated expenses for reimbursement (keep cash or voucher)
+* Fictitious expenses (blank receipts, letterhead, paid by clients)
+* Multiple payments (every two weeks for expense claims, 30 days limit)
+* Mileage claims computation
+
+
+Payroll/T&E controls;
+
+* Hiring function vs Payroll duties: keep seperate hire reocrds
+* Payroll preparation vs approval vs distribution payment vs reconcilaition
+* Seperate payroll bank accounts
+
+* Pay changes approved by manager and HR
+* Excessive overtime
+* Regular comparison (trend, budget/forecast, peers, departments, production schedule, improve productivity)
+* Holiday/leaves/weakends 
+* Forged signature
+
+* Commission vs sales vs unrealized sales
+* linear correlation
+
+* Approved travling (SAP Concur) 
+* Use P-Card for individual expense exceeding the threshold (not cash)
+* Detailed expense claim reports (when, where, who, what, how much)
+* Original supporting documents required (not scanned copy)
+* Poor quality receipts (consecutiely numbered receipts)
+* Spot-check (client records, never appear)
+
+
+
+### Corrpution
+
+* Conflict of interest
+* Bribery (record as a part of COGS)
+* Kickback (construction bids)
+
+
+
+### Fraudulent financial reportings
+
+
+Revenue;
+
+* Sale incentive, sales price, sales promotion, 
+* Recognition: premature
+* Cut-off: unearned revenue, POC, unshipped goods, 
+* Classification: one-time gain 
+* Existence: bogus sales
+* Round-tripping trades: purchase unnecessary inventories and sell back to supplier later (slow-moving AR). 
+* Parked sales: goods shipped to other warehouses owned by the firm
+* Channel stuffing/side deals: overselling products to customers with hidden terms (discounts, return, cancel)
+
+
+Ratios;
+
+* AR turnover (days)
+* GP/Net Sales, Net Sales/AR
+* Return/Gross Sales (reverse after YE), Discount/ Gross Sales
+* Adjustment: write-offs
+
+
+Asset/liability misstatements;
+
+* Capitalized expenses
+* Non-existent PPE
+* Improper assets valuation (IA, wastes, unauthorised PPE sales, dispose leased firm cars to RPT not at arm's length)
+* Overstated cash by forged bank statements
+* Overaccrued restructuring reserves offset expenses
+* Transactions with unconsolidated SPV (debts, impairment assets)
+* Record barter transactions as sales
+* Service contracts have less audit trails as compared to physical transactions
+* Deferred expenses (improperly record salary across border)
+
+
+
+
+
+
+
+
+
+
+
