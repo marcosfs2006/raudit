@@ -6,10 +6,19 @@
     <description>Recent content in Posts on RAudit Solution LLP</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 26 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Webscraping JSON Data</title>
+      <link>/2019/10/01/webscraping-json-data/</link>
+      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/10/01/webscraping-json-data/</guid>
+      <description>req &amp;lt;- &amp;#39;https://data.gov.sg/dataset/7a339d20-3c57-4b11-a695-9348adfd7614/resource/42ff9cfe-abe5-4b54-beda-c88f9bb438ee/data?limit=6000&amp;#39;df &amp;lt;- fromJSON(req)$records %&amp;gt;% as_tibble() %&amp;gt;% mutate(town = str_to_title(town), flat_type = str_to_title(flat_type),floor_area_sqm = as.numeric(floor_area_sqm),street_name = str_to_title(street_name),resale_price = as.numeric(resale_price), lease_commence_date = as.numeric(lease_commence_date), storey_range = str_to_lower(storey_range), block = paste0(&amp;quot;Blk&amp;quot;, block)) %&amp;gt;% separate(month, c(&amp;quot;year&amp;quot;, &amp;quot;month&amp;quot;), sep = &amp;quot;-&amp;quot;) %&amp;gt;% mutate(year = as.numeric(year),month = as.numeric(month), desc = paste0(town, &amp;quot;|&amp;quot;, block, &amp;quot;|&amp;quot;, storey_range, &amp;quot;|&amp;quot;, flat_model, &amp;quot;|&amp;quot;, flat_type, &amp;quot;|&amp;quot;, floor_area_sqm, &amp;quot;:Mth&amp;quot;, month)) %&amp;gt;% select(-12){&#34;</description>
+    </item>
     
     <item>
       <title>Fraud Auditors</title>

@@ -1,0 +1,93 @@
+---
+title: Webscraping JSON Data
+author: ''
+date: '2019-10-01'
+slug: webscraping-json-data
+categories: []
+tags: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, 
+                      fig.width = 7.5, fig.height = 5)
+
+library(tidyverse)
+library(lubridate)
+library(jsonlite)
+library(plotly)
+library(crosstalk)
+
+theme_set(theme_light() +
+             theme(plot.caption = element_text(size = 9, color = "gray50")))
+```
+
+
+```{r echo=TRUE, out.width = 8, out.height = 5}
+req <- 'https://data.gov.sg/dataset/7a339d20-3c57-4b11-a695-9348adfd7614/resource/42ff9cfe-abe5-4b54-beda-c88f9bb438ee/data?limit=6000'
+
+df <- fromJSON(req)$records %>% 
+  as_tibble() %>% 
+  mutate(town = str_to_title(town), 
+         flat_type = str_to_title(flat_type),
+         floor_area_sqm = as.numeric(floor_area_sqm),
+         street_name  = str_to_title(street_name),
+         resale_price = as.numeric(resale_price), 
+         lease_commence_date = as.numeric(lease_commence_date), 
+         storey_range = str_to_lower(storey_range), 
+         block = paste0("Blk", block)) %>% 
+  separate(month, c("year", "month"), sep = "-") %>% 
+  mutate(year = as.numeric(year),
+         month = as.numeric(month), 
+         desc = paste0(town, "|", block, "|", storey_range, "|", 
+                       flat_model, "|", flat_type, "|", floor_area_sqm, ":Mth", month)) %>% 
+  select(-12)
+```
+
+
+```{r}
+area <- c('Bukit Batok', 'Clementi', 'Jurong East', 'Jurong West')
+room <- c('3 Room', '4 Room', '5 Room')
+month <- c(6, 7, 8)
+
+clemnti <- df %>% 
+  filter(town == 'Clementi',
+         flat_type %in% room,
+         month %in% month, 
+         lease_commence_date >= 2000)
+
+rest <- df %>% 
+  filter(town != 'Clementi',
+         flat_type %in% room,
+         month %in% month, 
+         lease_commence_date >= 2000)
+
+
+overview <- rest %>% 
+  ggplot() +
+  geom_jitter(aes(as.factor(lease_commence_date), resale_price, text = desc), 
+              rest,
+              alpha = 0.5) +
+  geom_jitter(aes(as.factor(lease_commence_date), resale_price, text = desc), 
+              clemnti,
+              color = 'coral', 
+              show.legend  = FALSE) +
+  geom_hline(yintercept = 450000, color = 'red') +
+  scale_y_continuous(labels = scales::comma_format()) +
+  labs(title = 'HDB Transaction Prices (3|4|5 Rooms Built After 2000)', 
+       subtitle = "June/2019 - August/2019", 
+       x = '',
+       y = '') +
+  theme_light() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ 
+ggplotly(overview)
+```
+
+
+Codes and the data table will be available on [RPubs](https://rpubs.com/Stewartli) soon. You can get the list from there. 
+
+
+
+
+
