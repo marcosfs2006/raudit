@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>JavaScript MERN Stack  - RAudit Solution LLP</title>
+<meta property="og:title" content="JavaScript MERN Stack  - RAudit Solution LLP">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="https://rauditsolution.netlify.com/">About</a></li>
+    
+    <li><a href="https://rpubs.com/Stewartli">RPubs</a></li>
+    
+    <li><a href="https://github.com/stewartli">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/stewartli3">Twitter</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/stewart-li-30a11563/">Linkedin</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">JavaScript MERN Stack </h1>
+
+    
+    <span class="article-date">2019-10-08</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="vanilla-js" class="section level3">
+<h3>Vanilla JS</h3>
+<div id="variables" class="section level4">
+<h4>Variables</h4>
+<p>Template literals: <code>${}</code>, <code>+</code>, <code>\n</code>, <code>\</code>, <code>+=</code>,<br />
+Function scope: <code>var</code>,<br />
+Primitive values: <code>const</code>,<br />
+Block {scope}: <code>let</code>, <code>this</code>,</p>
+<p>null, undefined, symbol,<br />
+<code>typeof</code>,<br />
+<code>new String()</code>, <code>split('')</code>, <code>join</code>, <code>substring</code>, <code>substr</code>, <code>trim</code>, <code>padStart (10,'a')</code>, <code>padEnd</code>, <code>replace</code>, <code>concat</code>,<br />
+<code>Boolean()</code>,<br />
+<code>new Date()</code>, <code>getFullYear</code>,<br />
+<code>Math.sqrt</code>, <code>parseInt</code>, <code>toFixed(5)</code>, <code>%</code>, <code>%=</code>, <code>parseFloat(svg.attr("height"))</code>,<br />
+<code>new Set([1,1,1,1])</code>, <code>size</code>, <code>add</code>, <code>delete</code>, <code>has</code>, <code>clear</code>,</p>
+</div>
+<div id="object" class="section level4">
+<h4>Object</h4>
+<p>Object literal: <code>function maker (city, state){const address = {city: city, state}}</code><br />
+Key vs Value: <code>Object.keys()</code>, <code>Object.assign</code>, <code>Object.create</code>, <code>hasOwnProperty</code>,<br />
+Property vs Method(): <code>{}</code>, <code>this</code>, <code>.</code>,<br />
+Destructuring objects: <code>const {firstName: fn, lastName: ln} = Object</code>,</p>
+<p><code>function Pub(a,b){this.a = a; this.b = b}</code>,<br />
+<code>Pub.prototype.goFun = function(){}</code>,<br />
+<code>function Hotel (a,b,c){Pub.call(this,a,b); this.c = c}</code><br />
+<code>Hotel.prototype = Object.create(Pub.prototype)</code></p>
+<p><code>class Pub {constructor(a, b){this.a = a; this.b = b;} goFun(){}}</code>,<br />
+<code>get meta(){return}</code>,<br />
+<code>static</code>,<br />
+<code>export class Hotel extends Pub {constructor(a,b,c){super(a,b); this.c = c;}}</code></p>
+</div>
+<div id="array" class="section level4">
+<h4>Array</h4>
+<p>Destructuring array: <code>let [firstName] = ['a', 'b', 'c'];</code>, <code>firstName = 'd'</code><br />
+Spread operator: <code>let newArr = [...Array]</code>,<br />
+Rest operator: <code>function add ([...nums]){}</code>, <code>arguments</code>,</p>
+<p><code>push</code>, <code>pop</code>, <code>unshift</code>, <code>shift</code>,<br />
+<code>splice(1,1)</code><br />
+<code>includes</code>, <code>indexOf</code>,<br />
+<code>JSON.stringify()</code>, <code>JSON.parse()</code></p>
+</div>
+<div id="condition" class="section level4">
+<h4>Condition</h4>
+<p><code>if(true){}</code>, <code>if else if else</code>,<br />
+<code>? :</code><br />
+<code>switch</code>,</p>
+</div>
+<div id="for-loop" class="section level4">
+<h4>For loop</h4>
+<p><code>for(let i=0; i&lt;10; i++){}</code>,<br />
+<code>for (const com of coms){}</code>,<br />
+<code>for (let i in users){}</code><br />
+<code>let i = 2; while(i &lt;= 200){i++}</code>, <code>do while</code>,</p>
+</div>
+<div id="function" class="section level4">
+<h4>Function</h4>
+<p><code>function(){}</code><br />
+<code>function.call(object)</code><br />
+<code>function add(a=1, b=1){}</code>, (function hoisting: the order code lines)<br />
+<code>const top = function(){}</code><br />
+<code>=&gt;</code> (don’t have <code>this</code> and solve the issue of funciton inside of function),<br />
+<code>import {} from './'</code>, <code>export const data = []</code>,</p>
+<p><code>function top(a){return function(b){return a*b}}</code><br />
+<code>forEach((item, index, array) =&gt; {})</code><br />
+<code>map</code>, <code>filter</code>, <code>sort</code>,<br />
+<code>reduce(x,y) =&gt; x+y</code>,<br />
+<code>some(true)</code>,<br />
+<code>do</code></p>
+</div>
+<div id="dom" class="section level4">
+<h4>DOM</h4>
+<p>console, fetch, document, monitor, localStorage,<br />
+<code>console.dir(document)</code>, <code>table([{}])</code>, <code>clear</code>, <code>group</code>, <code>groupEnd</code>, <code>time</code>, <code>timeEnd</code>, <code>assert</code>,<br />
+<code>$_</code>, <code>$0</code>, <code>Esc</code><br />
+<code>document.write("&lt;br&gt;")</code>,<br />
+<code>document.body.style.backgroundColor</code>,<br />
+<code>header.style.setProperty('--header-bg-color', boxMainColor);</code></p>
+<p><code>querySelectorAll</code>, <code>getElementById</code>,<br />
+<code>addEventListener('cut/paste/focus/blur/keydown/mouseover/click/input[type="text"]/submit/change', funciton)</code>,<br />
+<code>e.preventDefault</code>, <code>e.clientX</code>, <code>e.offsetX</code>, <code>e.altKey</code>,</p>
+<p><code>ul.firstElementChild.textContent='hello'</code>, <code>innerHTML</code>, <code>innerText</code>,<br />
+<code>ul.classList.add()</code>,</p>
+<p><code>const newli = document.createElement('li')</code>,<br />
+<code>createElement('div').setAttribute('title', 'hello')</code>,<br />
+<code>const contentli = document.createTextNode(inputli.value)</code>,<br />
+<code>newli.appendChild(contentli)</code>,</p>
+<p><code>insertAdjacentHTML("beforeend", ``&lt;li&gt;${x}&lt;button onClick='deleteItem(this)'&gt;Delete&lt;/button&gt;&lt;/li&gt;``)</code>,<br />
+<code>insertBefore()</code>,<br />
+<code>parentElement.remove()</code>,</p>
+<p><code>localStorage.setItem('name', 'John');</code><br />
+<code>localStorage.getItem('name');</code><br />
+<code>localStorage.clear('name');</code><br />
+<code>document.cookie = 'username=John Doe';</code></p>
+</div>
+<div id="http" class="section level4">
+<h4>HTTP</h4>
+<p>ajax (xhr) request: txt, json, external api,<br />
+<code>let xhr = new XMLHttpRequest()</code>,<br />
+<code>xhr.open(type='GET', 'url/file', async=true)</code>,<br />
+<sub><code>xhr.onprogress = funciton(){}</code></sub><br />
+<code>xhr.onload = function(){this.status(200, 400, 500); JSON.parse(this.responseText)}</code>,<br />
+<sub><code>xhr.onreadystatechange = function(){this.readyState}</code></sub><br />
+<sub><code>xhr.onerror = funciton(){}</code></sub><br />
+<code>xhr.send()</code></p>
+<p>http request: callback, promise, fetch, axios, async,<br />
+<code>function top(data, callback){data.push(); callback();}</code>,<br />
+<code>setTimeout(()=&gt;msg.remove(), 1000)</code>, <code>clearTimeout</code>, <code>setInterval()</code>,</p>
+<p><code>const prom = new Promise((resolve, reject) =&gt; {setTimeout(() =&gt; {resolve();},2000);})</code>,<br />
+<code>const prom = new Promise((resolve, reject) =&gt; {setTimeout(() =&gt; {reject(new Error('err'));},2000);})</code>,<br />
+<code>prom.then(data =&gt; {}).catch(err =&gt; {})</code>,<br />
+<code>Promise.all([])</code>,</p>
+<p><code>fetch(url).then(res =&gt; res.json()).then(res =&gt; {}).catch(err =&gt; {})</code>,<br />
+<code>axios.get(''url).then(res =&gt; this.setState({dos: res.data}))</code>,<br />
+<code>async function top(){const res = await fetch(url); const data = await res.json()}</code>,</p>
+</div>
+<div id="references" class="section level4">
+<h4>References</h4>
+<p>For details, watch the followings;</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://www.youtube.com/watch?v=hdI2bqOjy3c">JavaScript Crash Course For Beginners 2019</a>.</li>
+<li><a href="https://www.youtube.com/watch?v=M2bJBuaOeOQ">JavaScript Cardio 2018</a>.</li>
+<li><a href="https://www.youtube.com/watch?v=vDJpGenyHaA">JavaScript OOP Crash Course 2018</a>,</li>
+<li><a href="https://www.youtube.com/watch?v=0ik6X4DJKCc">JavaScript DOM Crash Course 2017</a>,</li>
+<li><a href="https://www.youtube.com/watch?v=PoRJizFvM7s">Async JS Crash Course 2018</a></li>
+<li><a href="https://www.youtube.com/watch?v=iYM2zFP3Zn0&amp;t=1289s">HTTP Crash Course &amp; Exploration 2019</a></li>
+<li><a href="https://www.youtube.com/watch?v=82hnvUYY6QA">AJAX Crash Course 2017</a></li>
+</ol>
+<p>For JS documentation, read <a href="https://github.com/lukehoban/es6features">ECMAScript 6</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN</a>.</p>
+</div>
+</div>
+<div id="node" class="section level3">
+<h3>Node</h3>
+<p><code>npm init -y</code>, <code>npm i express</code>,<br />
+<code>npm i --save-dev nodemon</code>, <code>npm i -D nodemon</code>, <code>npm i -g nodemon</code>,<br />
+<code>npm run dev</code>,<br />
+<code>npm install</code>,</p>
+<p><code>module.exports = Object | class</code>,<br />
+<code>(function(exports, require, module, __filename, __dirname){})</code></p>
+<p><code>path.parse</code>, <code>path.join</code>,<br />
+<code>fs.mkdir</code>, <code>fs.writeFile</code>, <code>fs.appendFile</code>, <code>fs.readFile</code>, <code>fs.rename</code>,<br />
+<code>os.cpus</code>, <code>os.platform</code>, <code>os.arch</code>, <code>os.freemem</code>, <code>os.homedir</code>, <code>os.uptime</code>,</p>
+<p><code>const myurl = new URL('')</code>, <code>myurl.href</code>, <code>myurl.hostname</code>, <code>myurl.pathname</code>,<br />
+<code>myurl.search</code>, <code>myurl.searchParams</code>, <code>myurl.searchParams.append</code>,</p>
+<p><code>class MyEmitter extends events{}</code>, <code>const myEmitter = new MyEmitter()</code>,<br />
+<code>myEmitter.on('event', () =&gt; {})</code>, <code>myEmitter.emit()</code>,</p>
+<p><code>let http = require('http')</code>,<br />
+<code>let app = http.createServer((req,res) =&gt; {req.url, req.body, res.write, res.writeHead(status,{object}), res.end('&lt;h1&gt;')})</code>,<br />
+<code>app.listen(3000, () =&gt; {})</code>,</p>
+<div id="references-1" class="section level4">
+<h4>References</h4>
+<p>For details, watch <a href="https://www.youtube.com/watch?v=fBNz5xF-Kx4&amp;t=2s">Node.js Crash Course 2019</a>.<br />
+For documentaion, read <a href="https://nodejs.org/dist/latest-v12.x/docs/api/">Node.js Doc</a>.<br />
+To use js libraries, visit <a href="https://www.npmjs.com/">npmjs</a>.</p>
+</div>
+</div>
+<div id="express" class="section level3">
+<h3>Express</h3>
+<p><code>const express = require('express')</code>,<br />
+<code>const router = express.Router()</code>,<br />
+<code>const app = express()</code>,</p>
+<p><code>app.use(express.static(path))</code>,<br />
+<code>app.get('/', (req, res) =&gt; {res.send(``); res.status(500).json(); res.sendFile(); res.render(); res.json();  res.redirect('/')})</code>,</p>
+<p><code>app.use(express.json())</code>,<br />
+<code>app.use(express.urlencoded({extended: false}))</code>,</p>
+<p><code>const middlewareFunction = (req,res,next){req.potocol; req.get('host'); req.originalUrl; req.body; req.header; req.params; next();}</code>,<br />
+<code>app.use(middlewareFunction)</code>,</p>
+<p><code>router.get('/', verify, async (req, res) =&gt; {try{const posts = await Post.find()} catch(err){res.json()}})</code>,<br />
+<code>module.exports = router;</code>,<br />
+<code>app.use('/api', require('./routes/api'))</code>,</p>
+<p><code>app.listen(3000, () =&gt; {})</code>,</p>
+<div id="references-2" class="section level4">
+<h4>References</h4>
+<p>For details, watch <a href="https://www.youtube.com/watch?v=L72fhGm1tfE&amp;t=1s">Express JS Crash Course 2019</a> and <a href="https://www.youtube.com/watch?v=2jqok-WgelI">JWT Tutorial 2019</a>.</p>
+<p>For express documentaion, read <a href="https://expressjs.com/en/api.html">Express.js Doc</a>.<br />
+For express-handlebars documentaion, read <a href="https://github.com/ericf/express-handlebars">express-handlebars</a>.</p>
+<p>For postman, refer to <a href="https://www.getpostman.com/">postman</a>.<br />
+For JWT, refer to <a href="https://jwt.io">JWT</a>.</p>
+</div>
+</div>
+<div id="mongodb" class="section level3">
+<h3>MongoDB</h3>
+<p><code>show dbs</code>,<br />
+<code>use test1</code>, <code>show collections</code>,<br />
+<code>db.dropDatabase()</code>,</p>
+<p><code>use test1</code>, <code>db</code>, <code>db.createCollection('posts')</code>,<br />
+<code>db.posts.insert({})</code>,<br />
+<code>db.posts.insertMany({})</code>,</p>
+<p><code>db.posts.find().pretty()</code>,<br />
+<code>db.posts.find({category: 'News'}).pretty()</code>,<br />
+<code>db.posts.find().limit(2)</code>,<br />
+<code>db.posts.find().forEach(function(doc) {print(doc.title)})</code>,<br />
+<code>db.posts.find().sort({id: 1}).pretty()</code>,<br />
+<code>db.posts.find({category: 'News'}).count()</code>,<br />
+<code>db.posts.findOne({:})</code>,</p>
+<p><code>db.posts.update({:}, {:}, {upsert: true})</code>,<br />
+<code>db.posts.update({:}, {$set: {:,}}, {upsert: true})</code>,<br />
+<code>db.posts.update({:}, {$inc: {:,}}, {upsert: true})</code>,<br />
+<code>db.posts.update({:}, {$rename: {:'',}}, {upsert: true})</code>,<br />
+<code>db.posts.remove({})</code>,<br />
+<code>db.posts.find({comments: {$elemMatch: {user: 'A'}}})</code>,</p>
+<p><code>db.pots.createIndex({title: 'text'})</code>,<br />
+<code>db.posts.find({$text: {$search: '\'Post O\''}})</code>,<br />
+<code>db</code>posts.find({views: {$gte: 3}}),</p>
+<p><code>mongoose.connect('url', () =&gt; {})</code>,<br />
+<code>const postSchema = mongoose.Schema({title: {type: String, required: true, default: Date.now}})</code>,<br />
+<code>module.exports = mongoose.model('Posts', postSchema)</code>,<br />
+<code>const post = new Post({title: req.body.title})</code>,<br />
+<code>post.save().then(data =&gt; {res.json(data)}).catch(err =&gt; {res.json()})</code>,</p>
+<p><code>db.posts.findById(req.params.id)</code>,<br />
+<code>db.posts.updateOne({req.params.id}, {$set: {}})</code>,</p>
+<div id="references-3" class="section level4">
+<h4>References</h4>
+<p>For details, watch <a href="https://www.youtube.com/watch?v=-56x56UppqQ">MongoDB Crash Course 2019</a>.<br />
+For MongoDB documentation, read <a href="https://www.mongodb.com/what-is-mongodb">MongoDB</a>.<br />
+For mLab, refer to <a href="https://mlab.com/">mLab</a>.</p>
+</div>
+</div>
+<div id="reactredux" class="section level3">
+<h3>React/Redux</h3>
+<div id="framework" class="section level4">
+<h4>Framework</h4>
+<p>App -&gt; Components -&gt; Action -&gt; Reducer -&gt; Dispatch -&gt; Store,<br />
+Public Index.html &lt;- Index.js &lt;- App.js -&gt; render <sub>component</sub> (return <sub>display</sub> {JSX className}),</p>
+<p><code>npx create-react-app .</code>, <code>npm start</code>, <code>npm run build</code>,<br />
+<code>rcc</code>, <code>rce</code>, <code>rfc</code>, <code>rcf</code>,</p>
+<p><code>style={{backgroundColor: ''}}</code>,<br />
+<code>const itemStyle = {backgroundColor: ''}</code>, <code>style={itemStyle}</code>,<br />
+<code>getStyle = () =&gt; {return {textDecoration: 'line-through'}}</code>, <code>style={this.getStyle()}</code>,</p>
+<p><code>import {BroswerRouter, Route, Link} from 'react-router-dom'</code>,<br />
+<code>return(&lt;BrowserRouter&gt;&lt;Route exact path='/' render={props =&gt; (&lt;React.Fragment&gt;&lt;/React.Fragment&gt;)}/&gt;&lt;/BroswerRouter&gt;)</code>,<br />
+<code>&lt;Route path='/about' component={About}&gt;</code>,<br />
+<code>&lt;Link to='/'&gt;&lt;/Link&gt;</code>,</p>
+</div>
+<div id="stateprops" class="section level4">
+<h4>State/Props</h4>
+<p><code>state = {}</code>, <code>this.setState({dos: [...]})</code>,</p>
+<p><code>&lt;Dos dos={this.state.dos}/&gt; (App)</code>, <code>this.props.dos</code> (App -&gt; Component),<br />
+<code>&lt;input onChange={this.props.onChange.bind(this, id)}&gt;</code> (Component -&gt; App),<br />
+<code>onChange = (e) =&gt; {this.setState({[e.target.name] : e.target.value})}</code>,</p>
+<p><sub><code>import PropTypes from 'prop-types'</code></sub><br />
+<sub><code>Dos.propTypes = {dos: PropTypes.array.isRequired}</code></sub></p>
+</div>
+<div id="life-cycle-methods" class="section level4">
+<h4>Life cycle methods</h4>
+<p><code>render</code>,<br />
+<code>componentWillReceiveProps(nextProps){}</code>,<br />
+<code>componentDidMount(){axios.get('url').then()}</code>,<br />
+<code>componentWillMount(){fetch('url').then(res =&gt; res.json()).then(data =&gt; this.setState({posts: data}))}</code>,</p>
+</div>
+<div id="redux" class="section level4">
+<h4>Redux</h4>
+<p>Store: globalized state (store all app data).<br />
+Action: only describe what you want to do (functions return {objects}).<br />
+Reducer: check which action and change from a state to another (<code>initial state/action</code>).<br />
+Dispatch: send actions to reducers.</p>
+<p><code>npm i redux react-redux redux-thunk</code>,<br />
+<code>import {createStore, combineReducers, ~applyMiddleware~, ~compose~} from 'redux'</code>,<br />
+<code>import {Provider, ~connect~, useSelector, useDispatch} from 'react-redux'</code>,<br />
+<code>import {~thunk~} from 'redux-thunk'</code>,</p>
+<p><code>const store = createStore(reducer, {initialState}, applyMiddleware(...[middle]))</code>,<br />
+<code>let store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ &amp;&amp; window.__REDUX_DEVTOOLS_EXTENSION__())</code>,</p>
+<p><code>store.subscribe(() =&gt; {store.getState()})</code>, <code>store.dispatch(increment())</code>,<br />
+<code>render(){return(&lt;Provider store={store}&gt;&lt;/Provider&gt;)}</code>,</p>
+</div>
+<div id="references-4" class="section level4">
+<h4>References</h4>
+<p>For details, watch <a href="https://www.youtube.com/watch?v=sBws8MSXN7A&amp;t=1595s">React JS Crash Course 2019</a>.<br />
+For react documentation, read <a href="https://github.com/facebook/create-react-app">facebook create react app github</a>.</p>
+<p>For details, watch <a href="https://www.youtube.com/watch?v=CVpUuw9XSjY">Redux For Beginners 2019</a>.<br />
+Fore redux documentation, read <a href="https://github.com/reduxjs/redux/tree/master/docs/api">redux</a>.<br />
+For redux-devtools-extension, read <a href="https://github.com/zalmoxisus/redux-devtools-extension">redux-devtools-extension</a>.</p>
+</div>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -6,10 +6,31 @@
     <description>Recent content on RAudit Solution LLP</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 08 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>JavaScript MERN Stack </title>
+      <link>/2019/10/08/javascript-mern-stack/</link>
+      <pubDate>Tue, 08 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/10/08/javascript-mern-stack/</guid>
+      <description>Vanilla JSVariablesTemplate literals: ${}, +, \n, \, +=,
+Function scope: var,
+Primitive values: const,
+Block {scope}: let, this,
+null, undefined, symbol,
+typeof,
+new String(), split(&#39;&#39;), join, substring, substr, trim, padStart (10,&#39;a&#39;), padEnd, replace, concat,
+Boolean(),
+new Date(), getFullYear,
+Math.sqrt, parseInt, toFixed(5), %, %=, parseFloat(svg.attr(&#34;height&#34;)),
+new Set([1,1,1,1]), size, add, delete, has, clear,
+ObjectObject literal: function maker (city, state){const address = {city: city, state}}
+Key vs Value: Object.</description>
+    </item>
     
     <item>
       <title>Webscraping JSON Data</title>

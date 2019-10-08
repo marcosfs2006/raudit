@@ -1,0 +1,380 @@
+---
+title: 'JavaScript MERN Stack '
+author: ''
+date: '2019-10-08'
+slug: javascript-mern-stack
+categories: []
+tags: []
+---
+
+
+### Vanilla JS
+
+
+#### Variables
+
+
+Template literals: ``${}``, `+`, `\n`, `\`, `+=`,    
+Function scope: `var`,   
+Primitive values: `const`,    
+Block {scope}: `let`, `this`,    
+
+null, undefined, symbol,    
+`typeof`,   
+`new String()`, `split('')`, `join`, `substring`, `substr`, `trim`, `padStart (10,'a')`, `padEnd`, `replace`, `concat`,   
+`Boolean()`,   
+`new Date()`, `getFullYear`,     
+`Math.sqrt`, `parseInt`, `toFixed(5)`, `%`, `%=`, `parseFloat(svg.attr("height"))`,      
+`new Set([1,1,1,1])`, `size`, `add`, `delete`, `has`, `clear`,   
+
+
+#### Object
+
+
+Object literal: `function maker (city, state){const address = {city: city, state}}`   
+Key vs Value: `Object.keys()`, `Object.assign`, `Object.create`, `hasOwnProperty`,   
+Property vs Method(): `{}`, `this`, `.`,    
+Destructuring objects: `const {firstName: fn, lastName: ln} = Object`,   
+
+`function Pub(a,b){this.a = a; this.b = b}`,   
+`Pub.prototype.goFun = function(){}`,   
+`function Hotel (a,b,c){Pub.call(this,a,b); this.c = c}`   
+`Hotel.prototype = Object.create(Pub.prototype)`   
+
+`class Pub {constructor(a, b){this.a = a; this.b = b;} goFun(){}}`,    
+`get meta(){return}`,   
+`static`,   
+`export class Hotel extends Pub {constructor(a,b,c){super(a,b); this.c = c;}}`   
+
+
+#### Array
+
+
+Destructuring array: `let [firstName] = ['a', 'b', 'c'];`, `firstName = 'd'`   
+Spread operator: `let newArr = [...Array]`,    
+Rest operator: `function add ([...nums]){}`, `arguments`,    
+
+`push`, `pop`, `unshift`, `shift`,   
+`splice(1,1)`   
+`includes`, `indexOf`,   
+`JSON.stringify()`, `JSON.parse()`   
+
+
+#### Condition
+
+
+`if(true){}`, `if else if else`,    
+`? :`   
+`switch`,    
+
+
+#### For loop
+
+
+`for(let i=0; i<10; i++){}`,    
+`for (const com of coms){}`,    
+`for (let i in users){}`   
+`let i = 2; while(i <= 200){i++}`, `do while`,   
+
+
+#### Function
+
+
+`function(){}`    
+`function.call(object)`   
+`function add(a=1, b=1){}`, (function hoisting: the order code lines)   
+`const top = function(){}`   
+`=>` (don't have `this` and solve the issue of funciton inside of function),   
+`import {} from './'`, `export const data = []`,   
+
+`function top(a){return function(b){return a*b}}`   
+`forEach((item, index, array) => {})`   
+`map`, `filter`, `sort`,    
+`reduce(x,y) => x+y`,    
+`some(true)`,   
+`do`   
+
+
+#### DOM
+
+
+console, fetch, document, monitor, localStorage,   
+`console.dir(document)`, `table([{}])`, `clear`, `group`, `groupEnd`, `time`, `timeEnd`, `assert`,   
+`$_`, `$0`, `Esc`   
+`document.write("<br>")`,    
+`document.body.style.backgroundColor`,    
+`header.style.setProperty('--header-bg-color', boxMainColor);`   
+
+`querySelectorAll`, `getElementById`,    
+`addEventListener('cut/paste/focus/blur/keydown/mouseover/click/input[type="text"]/submit/change', funciton)`,    
+`e.preventDefault`, `e.clientX`, `e.offsetX`, `e.altKey`,   
+
+`ul.firstElementChild.textContent='hello'`, `innerHTML`, `innerText`,    
+`ul.classList.add()`,      
+
+`const newli = document.createElement('li')`,    
+`createElement('div').setAttribute('title', 'hello')`,    
+`const contentli = document.createTextNode(inputli.value)`,   
+`newli.appendChild(contentli)`,       
+
+`insertAdjacentHTML("beforeend", ``<li>${x}<button onClick='deleteItem(this)'>Delete</button></li>``)`,     
+`insertBefore()`,      
+`parentElement.remove()`,       
+
+`localStorage.setItem('name', 'John');`   
+`localStorage.getItem('name');`   
+`localStorage.clear('name');`   
+`document.cookie = 'username=John Doe';`    
+
+
+#### HTTP
+
+
+ajax (xhr) request: txt, json, external api,       
+`let xhr = new XMLHttpRequest()`,     
+`xhr.open(type='GET', 'url/file', async=true)`,       
+~`xhr.onprogress = funciton(){}`~      
+`xhr.onload = function(){this.status(200, 400, 500); JSON.parse(this.responseText)}`,      
+~`xhr.onreadystatechange = function(){this.readyState}`~   
+~`xhr.onerror = funciton(){}`~   
+`xhr.send()`      
+
+http request: callback, promise, fetch, axios, async,         
+`function top(data, callback){data.push(); callback();}`,      
+`setTimeout(()=>msg.remove(), 1000)`, `clearTimeout`, `setInterval()`,       
+
+`const prom = new Promise((resolve, reject) => {setTimeout(() => {resolve();},2000);})`,      
+`const prom = new Promise((resolve, reject) => {setTimeout(() => {reject(new Error('err'));},2000);})`,      
+`prom.then(data => {}).catch(err => {})`,      
+`Promise.all([])`,      
+
+`fetch(url).then(res => res.json()).then(res => {}).catch(err => {})`,      
+`axios.get(''url).then(res => this.setState({dos: res.data}))`,      
+`async function top(){const res = await fetch(url); const data = await res.json()}`,      
+
+
+#### References
+
+
+For details, watch the followings;
+
+1. [JavaScript Crash Course For Beginners 2019](https://www.youtube.com/watch?v=hdI2bqOjy3c). 
+2. [JavaScript Cardio 2018](https://www.youtube.com/watch?v=M2bJBuaOeOQ).
+3. [JavaScript OOP Crash Course 2018](https://www.youtube.com/watch?v=vDJpGenyHaA), 
+4. [JavaScript DOM Crash Course 2017](https://www.youtube.com/watch?v=0ik6X4DJKCc), 
+5. [Async JS Crash Course 2018](https://www.youtube.com/watch?v=PoRJizFvM7s)
+6. [HTTP Crash Course & Exploration 2019](https://www.youtube.com/watch?v=iYM2zFP3Zn0&t=1289s)
+7. [AJAX Crash Course 2017](https://www.youtube.com/watch?v=82hnvUYY6QA)
+
+For JS documentation, read [ECMAScript 6](https://github.com/lukehoban/es6features) and [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript).
+
+
+
+### Node
+
+
+`npm init -y`, `npm i express`,    
+`npm i --save-dev nodemon`, `npm i -D nodemon`, `npm i -g nodemon`,   
+`npm run dev`,    
+`npm install`,    
+
+`module.exports = Object | class`,   
+`(function(exports, require, module, __filename, __dirname){})`   
+
+`path.parse`, `path.join`,   
+`fs.mkdir`, `fs.writeFile`, `fs.appendFile`, `fs.readFile`, `fs.rename`,   
+`os.cpus`, `os.platform`, `os.arch`, `os.freemem`, `os.homedir`, `os.uptime`,   
+
+`const myurl = new URL('')`, `myurl.href`, `myurl.hostname`, `myurl.pathname`,    
+`myurl.search`, `myurl.searchParams`, `myurl.searchParams.append`,     
+
+`class MyEmitter extends events{}`, `const myEmitter = new MyEmitter()`,   
+`myEmitter.on('event', () => {})`, `myEmitter.emit()`,   
+
+`let http = require('http')`,   
+`let app = http.createServer((req,res) => {req.url, req.body, res.write, res.writeHead(status,{object}), res.end('<h1>')})`,   
+`app.listen(3000, () => {})`,   
+
+
+#### References
+
+
+For details, watch [Node.js Crash Course 2019](https://www.youtube.com/watch?v=fBNz5xF-Kx4&t=2s).   
+For documentaion, read [Node.js Doc](https://nodejs.org/dist/latest-v12.x/docs/api/).   
+To use js libraries, visit [npmjs](https://www.npmjs.com/).   
+
+
+
+### Express
+
+
+`const express = require('express')`,    
+`const router = express.Router()`,      
+`const app = express()`,      
+
+`app.use(express.static(path))`,      
+`app.get('/', (req, res) => {res.send(``); res.status(500).json(); res.sendFile(); res.render(); res.json();  res.redirect('/')})`,   
+
+`app.use(express.json())`,   
+`app.use(express.urlencoded({extended: false}))`,   
+
+`const middlewareFunction = (req,res,next){req.potocol; req.get('host'); req.originalUrl; req.body; req.header; req.params; next();}`,   
+`app.use(middlewareFunction)`,   
+
+`router.get('/', verify, async (req, res) => {try{const posts = await Post.find()} catch(err){res.json()}})`,   
+`module.exports = router;`,   
+`app.use('/api', require('./routes/api'))`,   
+
+`app.listen(3000, () => {})`,   
+
+
+#### References
+
+
+For details, watch [Express JS Crash Course 2019](https://www.youtube.com/watch?v=L72fhGm1tfE&t=1s) and [JWT Tutorial 2019](https://www.youtube.com/watch?v=2jqok-WgelI).
+
+For express documentaion, read [Express.js Doc](https://expressjs.com/en/api.html).   
+For express-handlebars documentaion, read [express-handlebars](https://github.com/ericf/express-handlebars).   
+
+For postman, refer to [postman](https://www.getpostman.com/).    
+For JWT, refer to [JWT](https://jwt.io).   
+
+
+
+### MongoDB
+
+
+`show dbs`,    
+`use test1`, `show collections`,    
+`db.dropDatabase()`,   
+
+`use test1`, `db`, `db.createCollection('posts')`,   
+`db.posts.insert({})`,   
+`db.posts.insertMany({})`,   
+
+`db.posts.find().pretty()`,    
+`db.posts.find({category: 'News'}).pretty()`,    
+`db.posts.find().limit(2)`,   
+`db.posts.find().forEach(function(doc) {print(doc.title)})`,   
+`db.posts.find().sort({id: 1}).pretty()`,   
+`db.posts.find({category: 'News'}).count()`,   
+`db.posts.findOne({:})`,    
+
+`db.posts.update({:}, {:}, {upsert: true})`,   
+`db.posts.update({:}, {$set: {:,}}, {upsert: true})`,   
+`db.posts.update({:}, {$inc: {:,}}, {upsert: true})`,   
+`db.posts.update({:}, {$rename: {:'',}}, {upsert: true})`,   
+`db.posts.remove({})`,   
+`db.posts.find({comments: {$elemMatch: {user: 'A'}}})`,   
+
+`db.pots.createIndex({title: 'text'})`,   
+`db.posts.find({$text: {$search: '\'Post O\''}})`,   
+`db`posts.find({views: {$gte: 3}}),   
+
+`mongoose.connect('url', () => {})`,   
+`const postSchema = mongoose.Schema({title: {type: String, required: true, default: Date.now}})`,   
+`module.exports = mongoose.model('Posts', postSchema)`,   
+`const post = new Post({title: req.body.title})`,    
+`post.save().then(data => {res.json(data)}).catch(err => {res.json()})`,   
+
+`db.posts.findById(req.params.id)`,   
+`db.posts.updateOne({req.params.id}, {$set: {}})`,   
+
+
+#### References
+
+For details, watch [MongoDB Crash Course 2019](https://www.youtube.com/watch?v=-56x56UppqQ).   
+For MongoDB documentation, read [MongoDB](https://www.mongodb.com/what-is-mongodb).   
+For mLab, refer to [mLab](https://mlab.com/).   
+
+
+
+### React/Redux
+
+
+#### Framework
+
+
+App -> Components -> Action -> Reducer -> Dispatch -> Store,   
+Public Index.html <- Index.js <- App.js -> render ~component~ (return ~display~ {JSX className}),   
+
+`npx create-react-app .`, `npm start`, `npm run build`,   
+`rcc`, `rce`, `rfc`, `rcf`,   
+
+`style={{backgroundColor: ''}}`,    
+`const itemStyle = {backgroundColor: ''}`, `style={itemStyle}`,   
+`getStyle = () => {return {textDecoration: 'line-through'}}`, `style={this.getStyle()}`,   
+
+`import {BroswerRouter, Route, Link} from 'react-router-dom'`,   
+`return(<BrowserRouter><Route exact path='/' render={props => (<React.Fragment></React.Fragment>)}/></BroswerRouter>)`,   
+`<Route path='/about' component={About}>`,   
+`<Link to='/'></Link>`,   
+
+
+#### State/Props
+
+
+`state = {}`, `this.setState({dos: [...]})`,    
+
+`<Dos dos={this.state.dos}/> (App)`, `this.props.dos` (App -> Component),   
+`<input onChange={this.props.onChange.bind(this, id)}>` (Component -> App),   
+`onChange = (e) => {this.setState({[e.target.name] : e.target.value})}`,   
+
+~`import PropTypes from 'prop-types'`~   
+~`Dos.propTypes = {dos: PropTypes.array.isRequired}`~   
+
+
+#### Life cycle methods
+
+
+`render`,   
+`componentWillReceiveProps(nextProps){}`,   
+`componentDidMount(){axios.get('url').then()}`,   
+`componentWillMount(){fetch('url').then(res => res.json()).then(data => this.setState({posts: data}))}`,   
+ 
+
+#### Redux
+
+
+Store: globalized state (store all app data).   
+Action: only describe what you want to do (functions return {objects}).   
+Reducer: check which action and change from a state to another (`initial state/action`).   
+Dispatch: send actions to reducers.   
+
+`npm i redux react-redux redux-thunk`,   
+`import {createStore, combineReducers, ~applyMiddleware~, ~compose~} from 'redux'`,   
+`import {Provider, ~connect~, useSelector, useDispatch} from 'react-redux'`,   
+`import {~thunk~} from 'redux-thunk'`,   
+
+`const store = createStore(reducer, {initialState}, applyMiddleware(...[middle]))`,   
+`let store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())`,   
+
+`store.subscribe(() => {store.getState()})`, `store.dispatch(increment())`,   
+`render(){return(<Provider store={store}></Provider>)}`,   
+
+
+#### References
+
+
+For details, watch [React JS Crash Course 2019](https://www.youtube.com/watch?v=sBws8MSXN7A&t=1595s).   
+For react documentation, read [facebook create react app github](https://github.com/facebook/create-react-app).    
+
+For details, watch [Redux For Beginners 2019](https://www.youtube.com/watch?v=CVpUuw9XSjY).   
+Fore redux documentation, read [redux](https://github.com/reduxjs/redux/tree/master/docs/api).   
+For redux-devtools-extension, read [redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
