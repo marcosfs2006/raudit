@@ -1,0 +1,129 @@
+---
+title: Git for Windows
+author: ''
+date: '2019-10-13'
+slug: git-for-windows
+categories: []
+tags: []
+---
+
+
+**Installation**;   
+
+
+`git --version`,   
+`git config`, `git help config`,    
+
+`git config --global user.name "st"`,    
+`git config --global user.email "st"`,    
+`git config --global --list`, `git config --list`,    
+
+
+**Local wd -> staging -> remote repo**;   
+
+
+`git init`, `git status`,    
+`git add -A`, `git add .`, `git add --no-all`,    
+
+`git rm --cached <file>`,    
+`git reset`,    
+
+`git commit -m "msg"`,    
+`git log`, `git log --stat`,    
+
+`git remote add origin <link>`,    
+`git push -u origin master`,    
+
+`git remote -v`, `git branch -a`,   
+`git remote set-url origin <link>`,    
+
+
+**Remote repo -> local wd**;   
+
+
+`git clone <url> <where to clone or .>`,     
+`git diff`,   
+
+`git branch funcname`,    
+`git checkout funcname`,   
+`git push -u origin funcname`,    
+
+`git checkout master`,    
+`git pull origin master`,   
+`git branch --merged`, `git merge funcname`,   
+`git push origin master`,    
+
+`git branch -d funcname`,    
+`git push origin --delete funcname`,    
+
+
+**Work with changes**;   
+
+
+`git stash save "msg"`,    
+`git stash list`,   
+`git stash apply <tag>`, `git stash pop`, `git stash drop <tag>`, `git stash clear`,   
+`git checkout --.` (reset),   
+
+
+**Undo mistakes**;   
+
+
+`git commit --amend -m "msg"` (git history changed),      
+`git commit --amend` (a part of last commit),      
+
+`git cherry-pick <tag>` (from a banch to another),      
+`git reset --soft <tag>`, `git reset --hard <tag>`,       
+`git clean -df` (remove untracked files),      
+
+`git reflog`,   
+`git checkout <tag>`,   
+
+`git revert <tag>` (git history unchanged),   
+`git diff <tag> <tag>`,   
+
+
+**Git Bash**;   
+
+
+`pwd`, `pushd`, `popd`,    
+`ls *`, `ls -lah`, `ls /usr/bin/`,    
+`cd`, `cd ../..`, `cd ~`, `cd /`,    
+`file`,    
+
+`mkdir -p projects/project1/start`,    
+`touch .gitignore`, `touch *.txt`,    
+`nano file.txt` (ctrl+x),    
+`less` (q),      
+`cat >> file.txt`,    
+`echo "hello" > file.txt`, `echo "hello" >> file.txt`,    
+
+`mv file.txt file1.txt`,    
+`cp file.txt file1.txt`,    
+`cp file.txt ~/dir1/file1.txt`,    
+`rm`, `rmdir` (empty folder),    
+`rm -R`, `rm -rf .git`,     
+
+`which python`,    
+`find /`, `find .`,    
+`history`, `ctrl+r`, `ctrl+a`, `ctrl+e` (end), `ctrl+l`,    
+
+`#!/bin/bash`,    
+`chmod +x sample.sh`, `chmod 700 sample.sh`,    
+`source .bashrc`, `. .bashrc`,    
+
+`df -h` (free memory), `id`,    
+`set | less`, `printenv`,    
+
+
+### References
+
+
+For git tutorial, watch [Git Tutorial for Beginners 2015](https://www.youtube.com/watch?v=HVsySz-h9r4&list=PL-osiE80TeTuRUfjRe54Eea17-YfnOOAx).
+
+For download, visit [git-scm](https://git-scm.com) or [gitforwindows.org](https://gitforwindows.org/).
+
+
+
+
+

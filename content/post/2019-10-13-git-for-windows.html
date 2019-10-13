@@ -1,0 +1,84 @@
+---
+title: Git for Windows
+author: ''
+date: '2019-10-13'
+slug: git-for-windows
+categories: []
+tags: []
+---
+
+
+
+<p><strong>Installation</strong>;</p>
+<p><code>git --version</code>,<br />
+<code>git config</code>, <code>git help config</code>,</p>
+<p><code>git config --global user.name "st"</code>,<br />
+<code>git config --global user.email "st"</code>,<br />
+<code>git config --global --list</code>, <code>git config --list</code>,</p>
+<p><strong>Local wd -&gt; staging -&gt; remote repo</strong>;</p>
+<p><code>git init</code>, <code>git status</code>,<br />
+<code>git add -A</code>, <code>git add .</code>, <code>git add --no-all</code>,</p>
+<p><code>git rm --cached &lt;file&gt;</code>,<br />
+<code>git reset</code>,</p>
+<p><code>git commit -m "msg"</code>,<br />
+<code>git log</code>, <code>git log --stat</code>,</p>
+<p><code>git remote add origin &lt;link&gt;</code>,<br />
+<code>git push -u origin master</code>,</p>
+<p><code>git remote -v</code>, <code>git branch -a</code>,<br />
+<code>git remote set-url origin &lt;link&gt;</code>,</p>
+<p><strong>Remote repo -&gt; local wd</strong>;</p>
+<p><code>git clone &lt;url&gt; &lt;where to clone or .&gt;</code>,<br />
+<code>git diff</code>,</p>
+<p><code>git branch funcname</code>,<br />
+<code>git checkout funcname</code>,<br />
+<code>git push -u origin funcname</code>,</p>
+<p><code>git checkout master</code>,<br />
+<code>git pull origin master</code>,<br />
+<code>git branch --merged</code>, <code>git merge funcname</code>,<br />
+<code>git push origin master</code>,</p>
+<p><code>git branch -d funcname</code>,<br />
+<code>git push origin --delete funcname</code>,</p>
+<p><strong>Work with changes</strong>;</p>
+<p><code>git stash save "msg"</code>,<br />
+<code>git stash list</code>,<br />
+<code>git stash apply &lt;tag&gt;</code>, <code>git stash pop</code>, <code>git stash drop &lt;tag&gt;</code>, <code>git stash clear</code>,<br />
+<code>git checkout --.</code> (reset),</p>
+<p><strong>Undo mistakes</strong>;</p>
+<p><code>git commit --amend -m "msg"</code> (git history changed),<br />
+<code>git commit --amend</code> (a part of last commit),</p>
+<p><code>git cherry-pick &lt;tag&gt;</code> (from a banch to another),<br />
+<code>git reset --soft &lt;tag&gt;</code>, <code>git reset --hard &lt;tag&gt;</code>,<br />
+<code>git clean -df</code> (remove untracked files),</p>
+<p><code>git reflog</code>,<br />
+<code>git checkout &lt;tag&gt;</code>,</p>
+<p><code>git revert &lt;tag&gt;</code> (git history unchanged),<br />
+<code>git diff &lt;tag&gt; &lt;tag&gt;</code>,</p>
+<p><strong>Git Bash</strong>;</p>
+<p><code>pwd</code>, <code>pushd</code>, <code>popd</code>,<br />
+<code>ls *</code>, <code>ls -lah</code>, <code>ls /usr/bin/</code>,<br />
+<code>cd</code>, <code>cd ../..</code>, <code>cd ~</code>, <code>cd /</code>,<br />
+<code>file</code>,</p>
+<p><code>mkdir -p projects/project1/start</code>,<br />
+<code>touch .gitignore</code>, <code>touch *.txt</code>,<br />
+<code>nano file.txt</code> (ctrl+x),<br />
+<code>less</code> (q),<br />
+<code>cat &gt;&gt; file.txt</code>,<br />
+<code>echo "hello" &gt; file.txt</code>, <code>echo "hello" &gt;&gt; file.txt</code>,</p>
+<p><code>mv file.txt file1.txt</code>,<br />
+<code>cp file.txt file1.txt</code>,<br />
+<code>cp file.txt ~/dir1/file1.txt</code>,<br />
+<code>rm</code>, <code>rmdir</code> (empty folder),<br />
+<code>rm -R</code>, <code>rm -rf .git</code>,</p>
+<p><code>which python</code>,<br />
+<code>find /</code>, <code>find .</code>,<br />
+<code>history</code>, <code>ctrl+r</code>, <code>ctrl+a</code>, <code>ctrl+e</code> (end), <code>ctrl+l</code>,</p>
+<p><code>#!/bin/bash</code>,<br />
+<code>chmod +x sample.sh</code>, <code>chmod 700 sample.sh</code>,<br />
+<code>source .bashrc</code>, <code>. .bashrc</code>,</p>
+<p><code>df -h</code> (free memory), <code>id</code>,<br />
+<code>set | less</code>, <code>printenv</code>,</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<p>For git tutorial, watch <a href="https://www.youtube.com/watch?v=HVsySz-h9r4&amp;list=PL-osiE80TeTuRUfjRe54Eea17-YfnOOAx">Git Tutorial for Beginners 2015</a>.</p>
+<p>For download, visit <a href="https://git-scm.com">git-scm</a> or <a href="https://gitforwindows.org/">gitforwindows.org</a>.</p>
+</div>
