@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Audit Data Analytics Part1 - RAudit Solution LLP</title>
+<meta property="og:title" content="Audit Data Analytics Part1 - RAudit Solution LLP">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="https://rauditsolution.netlify.com/">About</a></li>
+    
+    <li><a href="https://rpubs.com/Stewartli">RPubs</a></li>
+    
+    <li><a href="https://github.com/stewartli">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/stewartli3">Twitter</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/stewart-li-30a11563/">Linkedin</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Audit Data Analytics Part1</h1>
+
+    
+    <span class="article-date">2019-11-16</span>
+    
+
+    <div class="article-content">
+      
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/datatables-binding/datatables.js"></script>
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/dt-core/js/jquery.dataTables.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<script src="/rmarkdown-libs/d3/d3.min.js"></script>
+<script src="/rmarkdown-libs/radialNetwork-binding/radialNetwork.js"></script>
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>Accounting professionals tend to work under pressure so that they can cover as much ground as possible. However, tools at their disposal often have very limited power and are unable to optimistically fit their workflow. Furthermore, their work is prone to errors due to too many copy+paste and unreproduciblity.</p>
+<p>In my view, <strong>R</strong> is a perfect tool to increases their productivity and conform to their workflow. Watch <a href="https://www.youtube.com/watch?v=bWM1BszF-Mo&amp;t=1543s">Hadley Wickham on Data Science Challenges</a> and <a href="https://www.youtube.com/watch?v=9YTNYT1maa4">Data visualization and data science, Hadley Wickham</a> to learn more about it.</p>
+<p>Data analytics lifecycle described by <a href="https://r4ds.had.co.nz/">R4DS</a> sensibly matchs audit routines. This document is meant to demonstrate the usefulness of R in the field of audit via a specific use case. Visit <a href="https://github.com/stewartli/auditworkpaper">my github repo</a> for project details.</p>
+<p><img src="/post/2019-11-16-audit-data-analytics-part1_files/tidypic.png" style="width:95.0%" /></p>
+</div>
+<div id="data-preparation" class="section level3">
+<h3>Data preparation</h3>
+<p><em>Data scientists spend 80% of their time getting the data into desired shape and only 20% of their time on actual data analysis.</em></p>
+<p>The case study assumes that auditors are at the stage of audit planning and will use R to perform audit procedures. To obtain data, auditors will typically go through media coverage, company announcements and Genernal Ledger (Database or PBC). R has excellent tools for <a href="https://raudit.netlify.com/2019/08/08/listed-companies-in-singapore/">webscrapping</a>, pdf table extraction and SQL queries.</p>
+<p>Unless there are unknown bank accounts, all company transactions will be recorded in G/L. G/L contains valuable information for auditors to perform risk assessment and preliminary analytical procedures efficiently and effectively. Unfortunately, auditors often have difficulties in cleaning G/L and extracting information out of G/L. This is particularly true in the case of JV memo or description. Using R to solve those issues would be like a breeze.</p>
+<p><img src="/post/2019-11-16-audit-data-analytics-part1_files/tidywork.png" style="width:95.0%" /></p>
+<p><strong>Dataset</strong></p>
+<pre><code>  # A tibble: 10 x 14
+        id account subaccount type  date       num   name  memo  split debit
+     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+   1     2 Compan~ Company C~ Check 2018-01-01 5001  Kuve~ Jana~ Rent      0
+   2     3 Compan~ Company C~ Check 2018-01-01 5000  Onli~ Set ~ Acco~     0
+   3     4 Compan~ Company C~ Depo~ 2018-01-01 &lt;NA&gt;  &lt;NA&gt;  Depo~ -SPL~ 31349
+   4     5 Compan~ Company C~ Check 2018-01-05 5002  Debo~ Pett~ Pett~     0
+   5     6 Compan~ Company C~ Check 2018-01-08 5003  Gas ~ ACCT~ Util~     0
+   6     7 Compan~ Company C~ Payc~ 2018-01-15 3001  King~ &lt;NA&gt;  -SPL~     0
+   7     8 Compan~ Company C~ Check 2018-01-15 5007  Auto~ Car ~ Car ~     0
+   8     9 Compan~ Company C~ Payc~ 2018-01-15 3003  Boli~ &lt;NA&gt;  -SPL~     0
+   9    10 Compan~ Company C~ Payc~ 2018-01-15 3004  Deen~ &lt;NA&gt;  -SPL~     0
+  10    11 Compan~ Company C~ Check 2018-01-22 5011  Offi~ Acct~ Supp~     0
+  # ... with 4 more variables: credit &lt;dbl&gt;, balance &lt;dbl&gt;, weekday &lt;ord&gt;,
+  #   month &lt;ord&gt;</code></pre>
+<p><strong>Data dictionary</strong></p>
+<div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","data":[["","account","subaccount","type","date","num","adj","name","memo","split","debit","credit","balance","weekday","month"],["Row number","Charter of Accounts","Charter of Accounts","Invoice/Payment","JV posting date","JV number","","Customers/Suppliers","JV description","Double entries","JV amount","JV amount","Cumulated JV amount","Mutated variable","Mutated variable"],["id","account","subaccount","type","date","num","adj","name","memo","split","debit","credit","balance","weekday","month"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Original<\/th>\n      <th>Definition<\/th>\n      <th>Rename<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":true,"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="completeness-test" class="section level3">
+<h3>Completeness test</h3>
+<p><strong>Chart of Accounts (COA)</strong></p>
+<div id="htmlwidget-2" style="width:672px;height:480px;" class="radialNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"root":{"name":"COA","children":[{"name":"Accounts Payable","children":[{"name":"Accounts Payable","account":"Accounts Payable","record":92,"subaccount":"Accounts Payable"}]},{"name":"Accounts Receivable","children":[{"name":"Accounts Receivable","account":"Accounts Receivable","record":182,"subaccount":"Accounts Receivable"}]},{"name":"Accumulated Depreciation","children":[{"name":"Accumulated Depreciation","account":"Accumulated Depreciation","record":12,"subaccount":"Accumulated Depreciation"}]},{"name":"Advertising Expense","children":[{"name":"Advertising Expense","account":"Advertising Expense","record":4,"subaccount":"Advertising Expense"}]},{"name":"Business License & Fees","children":[{"name":"Business License & Fees","account":"Business License & Fees","record":2,"subaccount":"Business License & Fees"}]},{"name":"Car/Truck Expense","children":[{"name":"Car Lease","account":"Car/Truck Expense","record":12,"subaccount":"Car Lease"},{"name":"Gas","account":"Car/Truck Expense","record":15,"subaccount":"Gas"},{"name":"Insurance-Auto","account":"Car/Truck Expense","record":12,"subaccount":"Insurance-Auto"},{"name":"Mileage","account":"Car/Truck Expense","record":1,"subaccount":"Mileage"},{"name":"Registration & License","account":"Car/Truck Expense","record":1,"subaccount":"Registration & License"},{"name":"Repairs & Maintenance","account":"Car/Truck Expense","record":2,"subaccount":"Repairs & Maintenance"}]},{"name":"Company Checking Account","children":[{"name":"Company Checking Account","account":"Company Checking Account","record":417,"subaccount":"Company Checking Account"}]},{"name":"Computer & Office Equipment","children":[{"name":"Computer & Office Equipment","account":"Computer & Office Equipment","record":1,"subaccount":"Computer & Office Equipment"}]},{"name":"Conferences and Seminars","children":[{"name":"Conferences and Seminars","account":"Conferences and Seminars","record":6,"subaccount":"Conferences and Seminars"}]},{"name":"Contributions","children":[{"name":"Contributions","account":"Contributions","record":1,"subaccount":"Contributions"}]},{"name":"Customer Deposits","children":[{"name":"Customer Deposits","account":"Customer Deposits","record":1,"subaccount":"Customer Deposits"}]},{"name":"Deborah Wood Equity","children":[{"name":"Deborah Wood's Time to Jobs","account":"Deborah Wood Equity","record":244,"subaccount":"Deborah Wood's Time to Jobs"},{"name":"Deborah Wood Draws","account":"Deborah Wood Equity","record":12,"subaccount":"Deborah Wood Draws"}]},{"name":"Depreciation Expense","children":[{"name":"Depreciation Expense","account":"Depreciation Expense","record":12,"subaccount":"Depreciation Expense"}]},{"name":"Direct Labor","children":[{"name":"Wages - Sales-Inside","account":"Direct Labor","record":1,"subaccount":"Wages - Sales-Inside"},{"name":"Wages - Warehouse","account":"Direct Labor","record":48,"subaccount":"Wages - Warehouse"}]},{"name":"Dues and Subscriptions","children":[{"name":"Dues and Subscriptions","account":"Dues and Subscriptions","record":5,"subaccount":"Dues and Subscriptions"}]},{"name":"Freight Costs","children":[{"name":"Freight Costs","account":"Freight Costs","record":11,"subaccount":"Freight Costs"}]},{"name":"Insurance","children":[{"name":"General Liability Insurance","account":"Insurance","record":12,"subaccount":"General Liability Insurance"},{"name":"Owner's Health Insurance","account":"Insurance","record":12,"subaccount":"Owner's Health Insurance"},{"name":"Professional Liability Insuranc","account":"Insurance","record":11,"subaccount":"Professional Liability Insuranc"},{"name":"Worker's Compensation","account":"Insurance","record":24,"subaccount":"Worker's Compensation"}]},{"name":"Inventory Asset","children":[{"name":"Inventory Asset","account":"Inventory Asset","record":928,"subaccount":"Inventory Asset"}]},{"name":"Line of Credit","children":[{"name":"Line of Credit","account":"Line of Credit","record":20,"subaccount":"Line of Credit"}]},{"name":"Maintenance/Janitorial","children":[{"name":"Maintenance/Janitorial","account":"Maintenance/Janitorial","record":15,"subaccount":"Maintenance/Janitorial"}]},{"name":"Marketing Expense","children":[{"name":"Marketing Expense","account":"Marketing Expense","record":3,"subaccount":"Marketing Expense"}]},{"name":"Meals and Entertainment","children":[{"name":"Meals and Entertainment","account":"Meals and Entertainment","record":21,"subaccount":"Meals and Entertainment"}]},{"name":"Office Equipment","children":[{"name":"Office Equipment","account":"Office Equipment","record":14,"subaccount":"Office Equipment"}]},{"name":"Opening Bal Equity","children":[{"name":"Opening Bal Equity","account":"Opening Bal Equity","record":1,"subaccount":"Opening Bal Equity"}]},{"name":"Other Expense","children":[{"name":"Interest Expense","account":"Other Expense","record":24,"subaccount":"Interest Expense"}]},{"name":"Packaging Materials","children":[{"name":"Packaging Materials","account":"Packaging Materials","record":3,"subaccount":"Packaging Materials"}]},{"name":"Payroll Clearing (owner's time)","children":[{"name":"Payroll Clearing (owner's time)","account":"Payroll Clearing (owner's time)","record":11,"subaccount":"Payroll Clearing (owner's time)"}]},{"name":"Payroll Liabilities","children":[{"name":"Payroll Taxes Payable","account":"Payroll Liabilities","record":625,"subaccount":"Payroll Taxes Payable"},{"name":"SEC125 Payable","account":"Payroll Liabilities","record":30,"subaccount":"SEC125 Payable"}]},{"name":"Petty Cash Account","children":[{"name":"Petty Cash Account","account":"Petty Cash Account","record":1,"subaccount":"Petty Cash Account"}]},{"name":"Postage and Delivery","children":[{"name":"Postage and Delivery","account":"Postage and Delivery","record":15,"subaccount":"Postage and Delivery"}]},{"name":"Prepaids","children":[{"name":"Prepaid Insurance","account":"Prepaids","record":12,"subaccount":"Prepaid Insurance"}]},{"name":"Professional Fees","children":[{"name":"Accounting Fees","account":"Professional Fees","record":5,"subaccount":"Accounting Fees"},{"name":"Legal Fees","account":"Professional Fees","record":2,"subaccount":"Legal Fees"},{"name":"Payroll Service Fees","account":"Professional Fees","record":12,"subaccount":"Payroll Service Fees"}]},{"name":"Promotional Expense","children":[{"name":"Promotional Expense","account":"Promotional Expense","record":4,"subaccount":"Promotional Expense"}]},{"name":"Purchases  (Cost of Goods)","children":[{"name":"Purchases  (Cost of Goods)","account":"Purchases  (Cost of Goods)","record":857,"subaccount":"Purchases  (Cost of Goods)"}]},{"name":"QuickBooks Credit Card","children":[{"name":"QuickBooks Credit Card","account":"QuickBooks Credit Card","record":46,"subaccount":"QuickBooks Credit Card"}]},{"name":"Rent","children":[{"name":"Rent","account":"Rent","record":12,"subaccount":"Rent"}]},{"name":"Repairs","children":[{"name":"Computer Repairs","account":"Repairs","record":1,"subaccount":"Computer Repairs"}]},{"name":"Revenue","children":[{"name":"Revenue","account":"Revenue","record":847,"subaccount":"Revenue"}]},{"name":"Sales Commission (outside reps)","children":[{"name":"Sales Commission (outside reps)","account":"Sales Commission (outside reps)","record":1,"subaccount":"Sales Commission (outside reps)"}]},{"name":"Supplies","children":[{"name":"Supplies","account":"Supplies","record":41,"subaccount":"Supplies"}]},{"name":"Telephone","children":[{"name":"Telephone","account":"Telephone","record":31,"subaccount":"Telephone"}]},{"name":"Travel","children":[{"name":"Travel","account":"Travel","record":9,"subaccount":"Travel"}]},{"name":"Undeposited Funds","children":[{"name":"Undeposited Funds","account":"Undeposited Funds","record":176,"subaccount":"Undeposited Funds"}]},{"name":"Utilities","children":[{"name":"Utilities","account":"Utilities","record":12,"subaccount":"Utilities"}]},{"name":"Wages","children":[{"name":"Employee Benefits","account":"Wages","record":12,"subaccount":"Employee Benefits"},{"name":"Employee Bonus","account":"Wages","record":1,"subaccount":"Employee Bonus"},{"name":"Payroll Tax Expenses","account":"Wages","record":271,"subaccount":"Payroll Tax Expenses"},{"name":"Sick/Holiday & Vacation Pay","account":"Wages","record":1,"subaccount":"Sick/Holiday & Vacation Pay"},{"name":"Wages - Office Staff","account":"Wages","record":24,"subaccount":"Wages - Office Staff"}]}]},"options":{"height":null,"width":null,"fontSize":10,"fontFamily":"serif","linkColour":"#ccc","nodeColour":"#fff","nodeStroke":"steelblue","textColour":"#111","margin":{"top":null,"right":null,"bottom":null,"left":null},"opacity":0.9}},"evals":[],"jsHooks":[]}</script>
+<p><strong>Control total</strong></p>
+<p>“b/f + current year = c/f” cannot be performed due to the lack of prior year.</p>
+<pre><code>  # A tibble: 1 x 2
+       debit   credit
+       &lt;dbl&gt;    &lt;dbl&gt;
+  1 2136029. 2136029.</code></pre>
+<p><strong>Range of date</strong></p>
+<pre><code>  [1] &quot;2018-01-01&quot; &quot;2018-12-31&quot;</code></pre>
+<p><strong>Missing values</strong></p>
+<p><img src="/post/2019-11-16-audit-data-analytics-part1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><strong>Round numbers</strong></p>
+<pre><code>  # A tibble: 36 x 8
+        id account      subaccount      type    date       num   debit credit
+     &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+   1    27 Company Che~ Company Checki~ Check   2018-01-31 5025      0   1000
+   2    40 Company Che~ Company Checki~ Transf~ 2018-02-09 &lt;NA&gt;      0  10000
+   3   101 Company Che~ Company Checki~ Check   2018-03-26 5075      0  10000
+   4   172 Company Che~ Company Checki~ Check   2018-05-25 5124      0  12000
+   5   210 Company Che~ Company Checki~ Bill P~ 2018-06-29 5156      0   1000
+   6   226 Company Che~ Company Checki~ Transf~ 2018-07-20 &lt;NA&gt;      0  10000
+   7   240 Company Che~ Company Checki~ Check   2018-07-25 5179      0  10000
+   8   272 Company Che~ Company Checki~ Check   2018-08-22 5206      0   3000
+   9   279 Company Che~ Company Checki~ Check   2018-08-27 5214      0  12000
+  10   320 Company Che~ Company Checki~ Bill P~ 2018-10-05 3079      0   6000
+  # ... with 26 more rows</code></pre>
+<p><strong>999 numbers</strong></p>
+<pre><code>  # A tibble: 11 x 8
+        id account       subaccount       type  date       num   debit credit
+     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt; &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+   1   403 Company Chec~ Company Checkin~ Payc~ 2018-12-15 5365    0    340. 
+   2   883 Inventory As~ Inventory Asset  Invo~ 2018-04-16 71087   0     49.0
+   3   971 Inventory As~ Inventory Asset  Invo~ 2018-05-16 71095   0     98.0
+   4  1029 Inventory As~ Inventory Asset  Invo~ 2018-05-24 71086   0     49.0
+   5  1082 Inventory As~ Inventory Asset  Invo~ 2018-06-07 71085   0     49.0
+   6  1495 Inventory As~ Inventory Asset  Invo~ 2018-12-10 71105   0     98.0
+   7  4027 Purchases  (~ Purchases  (Cos~ Invo~ 2018-04-16 71087  49.0    0  
+   8  4112 Purchases  (~ Purchases  (Cos~ Invo~ 2018-05-16 71095  98.0    0  
+   9  4170 Purchases  (~ Purchases  (Cos~ Invo~ 2018-05-24 71086  49.0    0  
+  10  4220 Purchases  (~ Purchases  (Cos~ Invo~ 2018-06-07 71085  49.0    0  
+  11  4615 Purchases  (~ Purchases  (Cos~ Invo~ 2018-12-10 71105  98.0    0</code></pre>
+<p><strong>JV posted on weekends</strong></p>
+<p><img src="/post/2019-11-16-audit-data-analytics-part1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Top 10 JVs posted on weekends are;</p>
+<pre><code>  # A tibble: 10 x 3
+     type            account                        n
+     &lt;chr&gt;           &lt;chr&gt;                      &lt;int&gt;
+   1 Invoice         Revenue                      165
+   2 Invoice         Inventory Asset              164
+   3 Invoice         Purchases  (Cost of Goods)   164
+   4 Paycheck        Payroll Liabilities          153
+   5 Paycheck        Wages                         76
+   6 Deposit         Undeposited Funds             52
+   7 Liability Check Payroll Liabilities           44
+   8 Paycheck        Company Checking Account      19
+   9 Invoice         Accounts Receivable           18
+  10 Paycheck        Direct Labor                  17</code></pre>
+<p><strong>Monthly accumulated FS</strong></p>
+<pre><code>  # A tibble: 6 x 7
+    subaccount                    Jan     Feb     Mar    Oct    Nov     Dec
+    &lt;chr&gt;                       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+  1 Accounting Fees             225        0       0   2544      0       0 
+  2 Accounts Payable         -35903   -45421  -21732. -4438. -6517. -16697.
+  3 Accounts Receivable       22443.   10455.  16399. 35194. 16227.  32333.
+  4 Accumulated Depreciation    -76.9   -154.   -231.  -769.  -846.   -923.
+  5 Advertising Expense         500        0       0   2000      0       0 
+  6 Business License &amp; Fees       0      710.      0      0      0       0</code></pre>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

@@ -3,20 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/2019/10/13/git-for-windows/</loc>
-    <lastmod>2019-10-13T00:00:00+00:00</lastmod>
+    <loc>/2019/11/16/audit-data-analytics-part1/</loc>
+    <lastmod>2019-11-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-10-13T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-10-13T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2019/10/13/git-for-windows/</loc>
+    <lastmod>2019-10-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>

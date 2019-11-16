@@ -6,10 +6,20 @@
     <description>Recent content in Posts on RAudit Solution LLP</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 16 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Audit Data Analytics Part1</title>
+      <link>/2019/11/16/audit-data-analytics-part1/</link>
+      <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/11/16/audit-data-analytics-part1/</guid>
+      <description>IntroductionAccounting professionals tend to work under pressure so that they can cover as much ground as possible. However, tools at their disposal often have very limited power and are unable to optimistically fit their workflow. Furthermore, their work is prone to errors due to too many copy+paste and unreproduciblity.
+In my view, R is a perfect tool to increases their productivity and conform to their workflow.</description>
+    </item>
     
     <item>
       <title>Git for Windows</title>

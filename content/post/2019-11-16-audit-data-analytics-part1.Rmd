@@ -1,0 +1,205 @@
+---
+title: Audit Data Analytics Part1
+author: ''
+date: '2019-11-16'
+slug: audit-data-analytics-part1
+categories: []
+tags: []
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = " ")
+
+library(tidyverse)
+library(lubridate)
+library(data.tree)
+library(networkD3)
+
+tb <- read_csv("C:/Users/Stewart Li/Dropbox/0. Stewart publication_Always updated/stdatascience/dsproject/auditworkpaper/data/gl.csv") %>% 
+  rename(id = X1) %>% 
+  select(-adj) %>% 
+  filter(!is.na(type)) %>% 
+  mutate(weekday = wday(date, label = TRUE),
+         month = month(date, label = TRUE))
+```
+
+
+### Introduction
+
+
+Accounting professionals tend to work under pressure so that they can cover as much ground as possible. However, tools at their disposal often have very limited power and are unable to optimistically fit their workflow. Furthermore, their work is prone to errors due to too many copy+paste and unreproduciblity.
+
+In my view, **R** is a perfect tool to increases their productivity and conform to their workflow. Watch [Hadley Wickham on Data Science Challenges](https://www.youtube.com/watch?v=bWM1BszF-Mo&t=1543s) and [Data visualization and data science, Hadley Wickham](https://www.youtube.com/watch?v=9YTNYT1maa4) to learn more about it.
+
+Data analytics lifecycle described by [R4DS](https://r4ds.had.co.nz/) sensibly matchs audit routines. This document is meant to demonstrate the usefulness of R in the field of audit via a specific use case. Visit [my github repo](https://github.com/stewartli/auditworkpaper) for project details. 
+
+![](/post/2019-11-16-audit-data-analytics-part1_files/tidypic.png){width=95%}
+
+
+### Data preparation
+
+
+*Data scientists spend 80% of their time getting the data into desired shape and only 20% of their time on actual data analysis.* 
+
+The case study assumes that auditors are at the stage of audit planning and will use R to perform audit procedures. To obtain data, auditors will typically go through media coverage, company announcements and Genernal Ledger (Database or PBC). R has excellent tools for [webscrapping](https://raudit.netlify.com/2019/08/08/listed-companies-in-singapore/), pdf table extraction and SQL queries. 
+
+Unless there are unknown bank accounts, all company transactions will be recorded in G/L. G/L contains valuable information for auditors to perform risk assessment and preliminary analytical procedures efficiently and effectively. Unfortunately, auditors often have difficulties in cleaning G/L and extracting information out of G/L. This is particularly true in the case of JV memo or description. Using R to solve those issues would be like a breeze. 
+
+![](/post/2019-11-16-audit-data-analytics-part1_files/tidywork.png){width=95%}
+
+
+**Dataset**
+
+
+```{r}
+head(tb, 10)
+```
+
+
+**Data dictionary**
+
+
+```{r}
+dd <- tribble(~Original, ~Definition, ~Rename,
+        "", "Row number" , "id",
+        "account", "Charter of Accounts", "account",
+        "subaccount", "Charter of Accounts", "subaccount",
+        "type", "Invoice/Payment", "type",
+        "date", "JV posting date", "date",
+        "num", "JV number", "num",
+        "adj", "", "adj",
+        "name", "Customers/Suppliers", "name",
+        "memo", "JV description", "memo",
+        "split", "Double entries", "split",
+        "debit", "JV amount", "debit", 
+        "credit", "JV amount", "credit", 
+        "balance", "Cumulated JV amount", "balance", 
+        "weekday", "Mutated variable", "weekday", 
+        "month", "Mutated variable", "month") %>% 
+  DT::datatable(rownames = F, options = list(paging= T))
+
+dd
+```
+
+
+### Completeness test
+
+
+**Chart of Accounts (COA)**
+
+
+```{r}
+coa_datatree <- tb %>% 
+  group_by(account, subaccount) %>% 
+  summarise(record = n()) %>% 
+  ungroup() %>% 
+  mutate(pathString = paste("COA", account, subaccount, sep = "||")) %>% 
+  as.data.frame() %>% 
+  as.Node(pathDelimiter = "||")
+
+useRtreeList <- ToListExplicit(coa_datatree, unname = TRUE)
+radialNetwork(useRtreeList)
+```
+
+
+**Control total** 
+
+"b/f + current year = c/f" cannot be performed due to the lack of prior year.     
+
+
+```{r}
+tb %>% 
+  summarise_at(vars(debit, credit), sum) 
+```
+
+
+**Range of date**
+
+
+```{r}
+range(tb$date)
+```
+
+
+**Missing values**
+
+
+```{r}
+visdat::vis_dat(tb)
+```
+
+
+**Round numbers**
+
+
+```{r}
+tb %>% 
+  filter(credit != 0 & credit %% 1000 == 0) %>% 
+  select(c(1:6, 10:11))
+```
+
+
+**999 numbers** 
+
+
+```{r}
+tb %>% 
+  filter((grepl(".(99)$", debit))|(grepl(".(99)$", credit))) %>% 
+  select(c(1:6, 10:11))
+```
+
+
+**JV posted on weekends**
+
+
+```{r}
+tb %>% 
+  mutate(weekday = fct_relevel(weekday, c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"))) %>% 
+  group_by(weekday, month) %>% 
+  summarise(trans = n()) %>% 
+  ggplot(aes(month, weekday, fill = trans)) +
+  geom_tile() + # geom_raster()
+  scale_fill_gradient2(low = "#EDD96E", mid = "#FFFFFF", high = "#7A002D", midpoint = 200) + 
+  coord_equal() +
+  theme_light() +
+  theme(panel.grid = element_blank()) +
+  labs(title = "JV posts on weekends", 
+       x = "", 
+       y ="", 
+       fill = "")
+```
+
+
+Top 10 JVs posted on weekends are;
+
+
+```{r}
+tb %>% 
+  filter(weekday %in% c("Sat", "Sun")) %>% 
+  count(type, account, sort = TRUE) %>%
+  top_n(10)
+```
+
+
+**Monthly accumulated FS**
+
+
+```{r}
+mth_fs <- tb %>% 
+  group_by(subaccount, month) %>%
+  arrange(date) %>% 
+  slice(n()) %>%
+  ungroup() %>% 
+  select(subaccount, month, balance) %>% 
+  pivot_wider(names_from = month, values_from = balance) %>% 
+  select(subaccount, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec) %>% 
+  replace(is.na(.), 0) 
+
+head(mth_fs[,c(1:4, 11:13)]) 
+```
+
+
+
+
+
