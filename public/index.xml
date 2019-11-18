@@ -35,6 +35,16 @@ Sales summary table by customers and months
     </item>
     
     <item>
+      <title>Audit Data Analytics Part4</title>
+      <link>/2019/11/18/audit-data-analytics-part4/</link>
+      <pubDate>Mon, 18 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/11/18/audit-data-analytics-part4/</guid>
+      <description>This part covers EDA. Target variable is revenue.
+Numeric descriptive statistics # A tibble: 41 x 13type variable missing complete n mean sd p0 p25 p50 &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;1 nume~ account~ 0 184 184 &amp;quot; 1~ &amp;quot; 11~ 0 0 0 2 nume~ adverti~ 0 184 184 &amp;quot; 1~ &amp;quot; 7~ 0 0 0 3 nume~ busines~ 0 184 184 &amp;quot; ~ &amp;quot; 5~ 0 0 0 4 nume~ car_lea~ 0 184 184 &amp;quot; 3~ &amp;quot; 13~ 0 0 0 5 nume~ compute~ 0 184 184 &amp;quot; ~ &amp;quot; 2~ 0 0 0 6 nume~ confere~ 0 184 184 &amp;quot; 2~ &amp;quot; 23~ 0 0 0 7 nume~ contrib~ 0 184 184 &amp;quot; 1~ &amp;quot; 18~ 0 0 0 8 nume~ depreci~ 0 184 184 &amp;quot; ~ &amp;quot; 1~ 0 0 0 9 nume~ dues_an~ 0 184 184 &amp;quot; 1~ &amp;quot; 9~ 0 0 0 10 nume~ employe~ 0 184 184 &amp;quot; 1~ &amp;quot; 4~ 0 0 0 # .</description>
+    </item>
+    
+    <item>
       <title>Audit Data Analytics Part1</title>
       <link>/2019/11/16/audit-data-analytics-part1/</link>
       <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>

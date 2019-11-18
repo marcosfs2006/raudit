@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Audit Data Analytics Part4 - RAudit Solution LLP</title>
+<meta property="og:title" content="Audit Data Analytics Part4 - RAudit Solution LLP">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="https://rauditsolution.netlify.com/">About</a></li>
+    
+    <li><a href="https://rpubs.com/Stewartli">RPubs</a></li>
+    
+    <li><a href="https://github.com/stewartli">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/stewartli3">Twitter</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/stewart-li-30a11563/">Linkedin</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Audit Data Analytics Part4</h1>
+
+    
+    <span class="article-date">2019-11-18</span>
+    
+
+    <div class="article-content">
+      
+
+
+<p>This part covers EDA. Target variable is revenue.</p>
+<div id="numeric-descriptive-statistics" class="section level3">
+<h3>Numeric descriptive statistics</h3>
+<pre><code>  # A tibble: 41 x 13
+     type  variable missing complete n     mean  sd    p0    p25   p50  
+     &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+   1 nume~ account~ 0       184      184   &quot;  1~ &quot; 11~ 0     0     0    
+   2 nume~ adverti~ 0       184      184   &quot;  1~ &quot;  7~ 0     0     0    
+   3 nume~ busines~ 0       184      184   &quot;   ~ &quot;  5~ 0     0     0    
+   4 nume~ car_lea~ 0       184      184   &quot;  3~ &quot; 13~ 0     0     0    
+   5 nume~ compute~ 0       184      184   &quot;   ~ &quot;  2~ 0     0     0    
+   6 nume~ confere~ 0       184      184   &quot;  2~ &quot; 23~ 0     0     0    
+   7 nume~ contrib~ 0       184      184   &quot;  1~ &quot; 18~ 0     0     0    
+   8 nume~ depreci~ 0       184      184   &quot;   ~ &quot;  1~ 0     0     0    
+   9 nume~ dues_an~ 0       184      184   &quot;  1~ &quot;  9~ 0     0     0    
+  10 nume~ employe~ 0       184      184   &quot;  1~ &quot;  4~ 0     0     0    
+  # ... with 31 more rows, and 3 more variables: p75 &lt;chr&gt;, p100 &lt;chr&gt;,
+  #   hist &lt;chr&gt;</code></pre>
+</div>
+<div id="target-variables" class="section level3">
+<h3>Target variables</h3>
+<p><strong>Central tendency</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><strong>Normality</strong></p>
+<p>p &lt; .05 then the distribution in question is significantly different from a normal distribution.</p>
+<pre><code>  
+    Shapiro-Wilk normality test
+  
+  data:  df_pl$revenue
+  W = 0.55243, p-value &lt; 2.2e-16</code></pre>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="correlation" class="section level3">
+<h3>Correlation</h3>
+<p><strong>Correlation matrix</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>Selected variables</strong></p>
+<p>Select those variables having at least 0.10 of correlation with the target variable.</p>
+<pre><code>  # A tibble: 12 x 3
+     rowname                  revenue purchases_cost_of_goods
+     &lt;chr&gt;                      &lt;dbl&gt;                   &lt;dbl&gt;
+   1 revenue                    1                       0.988
+   2 purchases_cost_of_goods    0.988                   1    
+   3 wages_sales_inside         0.479                   0.511
+   4 payroll_tax_expenses       0.357                   0.389
+   5 wages_office_staff         0.165                   0.177
+   6 wages_warehouse            0.160                   0.186
+   7 conferences_and_seminars   0.159                   0.146
+   8 supplies                   0.138                   0.149
+   9 dues_and_subscriptions     0.135                   0.125
+  10 interest_expense          -0.126                  -0.122
+  11 maintenance_janitorial    -0.109                  -0.107
+  12 accounting_fees            0.107                   0.111</code></pre>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><strong>Partial correlation</strong></p>
+<p>Purchase has the strongest relationship with sales.</p>
+<pre><code>  
+    Pearson&#39;s product-moment correlation
+  
+  data:  df_pl$revenue and df_pl$purchases_cost_of_goods
+  t = 86.758, df = 182, p-value &lt; 2.2e-16
+  alternative hypothesis: true correlation is not equal to 0
+  95 percent confidence interval:
+   0.9841401 0.9911132
+  sample estimates:
+       cor 
+  0.988125</code></pre>
+<p>Holding other variables constant, purchase has the following relationship with sales.</p>
+<pre><code>     estimate       p.value statistic   n gp  Method
+  1 0.9832985 1.442558e-119  68.12595 184 23 pearson</code></pre>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="categorical-descriptive-statistics" class="section level3">
+<h3>Categorical descriptive statistics</h3>
+<p><strong>Monthly sales distribution</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><strong>Weekly sales distribution</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part4_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

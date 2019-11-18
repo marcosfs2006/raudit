@@ -1,0 +1,295 @@
+---
+title: Audit Data Analytics Part4
+author: ''
+date: '2019-11-18'
+slug: audit-data-analytics-part4
+categories: []
+tags: []
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = " ")
+
+library(tidyverse)
+library(rlang)
+library(lubridate)
+
+tb <- read_csv("C:/Users/Stewart Li/Dropbox/0. Stewart publication_Always updated/stdatascience/dsproject/auditworkpaper/data/gl.csv") %>% 
+  rename(id = X1) %>% 
+  select(-adj) %>% 
+  filter(!is.na(type)) %>% 
+  mutate(weekday = wday(date, label = TRUE),
+         month = month(date, label = TRUE))
+
+df_ar <- tb %>% 
+  filter(subaccount %in% c("Accounts Receivable", "Revenue"))
+
+pl <- unique(tb$subaccount)[19:62] %>% dput
+df_pl <-tb %>% 
+  filter(subaccount %in% pl, 
+         !subaccount %in% c("Mileage", "Employee Bonus", "Sick/Holiday & Vacation Pay")) %>% 
+  group_by(date, subaccount) %>% 
+  summarise_at(vars(debit, credit), sum) %>% 
+  mutate(amt = abs(credit - debit)) %>% 
+  select(date, subaccount, amt) %>% 
+  pivot_wider(names_from = subaccount, values_from = amt) %>% 
+  replace(is.na(.), 0) %>% 
+  select(date, Revenue, everything()) %>% 
+  ungroup() %>% 
+  janitor::clean_names()
+```
+
+
+This part covers EDA. Target variable is revenue. 
+
+
+### Numeric descriptive statistics
+
+
+```{r}
+skimr::skim_to_wide(df_pl[-1])
+```
+
+
+### Target variables
+
+
+**Central tendency**
+
+
+```{r}
+df_pl %>% 
+  ggplot(aes(revenue)) +
+  scale_x_log10(labels = scales::comma) +
+  geom_histogram(aes(y = ..density..)) +
+  geom_density(alpha = .2, fill = "firebrick") +
+  theme_light() +
+  labs(title = "Sales distribution",
+       x = "Transformed Sales", 
+       y = "Density")
+```
+
+
+**Normality**
+
+
+p < .05 then the distribution in question is significantly different from a normal distribution.
+
+
+```{r}
+shapiro.test(df_pl$revenue)
+```
+
+
+```{r}
+qqnorm(df_pl$revenue)
+```
+
+
+### Correlation
+
+
+**Correlation matrix**
+
+
+```{r}
+corrplot::corrplot(cor(df_pl[-1]), type = "upper", 
+                   method='color', 
+                   tl.cex = .7, cl.cex = .7, 
+                   number.cex = 0.7, order = "hclust")
+```
+
+
+**Selected variables**
+
+
+Select those variables having at least 0.10 of correlation with the target variable.
+
+
+```{r}
+cor(df_pl[2:42]) %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  as_tibble() %>% 
+  select(c(1:2, 5)) %>% 
+  arrange(desc(abs(revenue))) %>% 
+  slice(1:12)
+```
+
+
+```{r}
+cor_numvar <- cor(df_pl[-1], use="pairwise.complete.obs")
+cor_sorted <- as.matrix(sort(cor_numvar[,'revenue'], decreasing = TRUE))
+corhigh <- names(which(apply(cor_sorted, 1, function(x) abs(x) > 0.1)))
+
+cor_numvar <- cor_numvar[corhigh, corhigh]
+cex.before <- par("cex")
+par(cex = 0.6)
+corrplot::corrplot.mixed(cor_numvar, tl.pos = "lt") # tl.col="black",
+par(cex = cex.before)
+```
+
+
+**Partial correlation**
+
+
+Purchase has the strongest relationship with sales.
+
+
+```{r}
+cor.test(df_pl$revenue, df_pl$purchases_cost_of_goods, use = 'complete.obs')
+```
+
+
+Holding other variables constant, purchase has the following relationship with sales.
+
+
+```{r}
+ppcor::pcor.test(x = df_pl$revenue, 
+                 y = df_pl$purchases_cost_of_goods, 
+                 z = df_pl[c(20:42)])
+```
+
+
+```{r}
+df_pl %>% 
+  ggplot(aes(revenue, purchases_cost_of_goods)) +
+  geom_point() +
+  geom_density_2d() +
+  geom_smooth(method = "lm", se = FALSE, col = "red") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_light() +
+  labs(y = "Purchases", 
+       x = paste0("Sales", '\n', 'Correlation: ', 
+              round(cor(df_pl$revenue, df_pl$purchases_cost_of_goods, use = 'complete.obs'), 2)))
+```
+
+
+### Categorical descriptive statistics
+
+
+**Monthly sales distribution**
+
+
+```{r}
+"%||%" <- function(a, b) {
+  if (!is.null(a)) a else b
+}
+
+geom_flat_violin <- function(mapping = NULL, data = NULL, stat = "ydensity",
+                             position = "dodge", trim = TRUE, scale = "area",
+                             show.legend = NA, inherit.aes = TRUE, ...) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomFlatViolin,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      trim = trim,
+      scale = scale,
+      ...
+    )
+  )
+}
+
+GeomFlatViolin <-
+  ggproto("GeomFlatViolin", Geom,
+          setup_data = function(data, params) {
+            data$width <- data$width %||%
+              params$width %||% (resolution(data$x, FALSE) * 0.9)
+            
+            # ymin, ymax, xmin, and xmax define the bounding rectangle for each group
+            data %>%
+              group_by(group) %>%
+              mutate(ymin = min(y),
+                     ymax = max(y),
+                     xmin = x,
+                     xmax = x + width / 2)
+            
+          },
+          
+          draw_group = function(data, panel_scales, coord) {
+            # Find the points for the line to go all the way around
+            data <- transform(data, xminv = x,
+                              xmaxv = x + violinwidth * (xmax - x))
+            
+            # Make sure it's sorted properly to draw the outline
+            newdata <- rbind(plyr::arrange(transform(data, x = xminv), y),
+                             plyr::arrange(transform(data, x = xmaxv), -y))
+            
+            # Close the polygon: set first and last point the same
+            # Needed for coord_polar and such
+            newdata <- rbind(newdata, newdata[1,])
+            
+            ggplot2:::ggname("geom_flat_violin", GeomPolygon$draw_panel(newdata, panel_scales, coord))
+          },
+          
+          draw_key = draw_key_polygon,
+          
+          default_aes = aes(weight = 1, colour = "grey20", fill = "white", size = 0.5,
+                            alpha = NA, linetype = "solid"),
+          
+          required_aes = c("x", "y")
+  )
+
+
+getPalette <- colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(12) 
+lb <- function(x) mean(x) - sd(x)
+ub <- function(x) mean(x) + sd(x)
+
+df_sum <- df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  group_by(month) %>% 
+  summarise_at(vars(credit), list(ymin = lb, ymax = ub, mean = mean))
+
+df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  ggplot(aes(factor(month), credit, fill = factor(month))) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), trim = TRUE, alpha = .8, scale = "width") +
+  geom_point(aes(y = credit, color = factor(month)), 
+             position = position_jitter(width = .15), size = .5, alpha = 0.8) +
+  geom_boxplot(width = .1, outlier.shape = NA, alpha = 0.5) +
+  geom_point(data = df_sum, aes(x = month, y = mean), 
+             position = position_nudge(x = 0.3), size = 2.5) +
+  geom_errorbar(data = df_sum, aes(ymin = ymin, ymax = ymax, y = mean), 
+                position = position_nudge(x = 0.3), width = 0) +
+  expand_limits(x = 5.25) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_color_manual(values = getPalette) +
+  scale_fill_manual(values = getPalette) +
+  theme_light() +
+  theme(legend.position="none") +
+  labs(title = "Monthly sales distribution", 
+       x = "", 
+       y = "")
+```
+
+
+**Weekly sales distribution**
+
+
+```{r}
+df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  mutate(weekday = fct_relevel(weekday, rev(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")))) %>%
+  ggplot(aes(weekday, credit)) +
+  geom_boxplot() +
+  geom_jitter(shape = 16, position = position_jitter(0.4), alpha = .3) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::dollar) +
+  stat_summary(fun.y = mean, geom = "point", shape = 13, size = 4, color = "firebrick") +
+  theme_light() +
+  labs(title = "Weekly sales distribution",
+       x = "", 
+       y = "")
+```
+
+
+
+
+
