@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Audit Data Analytics Part2 - RAudit Solution LLP</title>
+<meta property="og:title" content="Audit Data Analytics Part2 - RAudit Solution LLP">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="https://rauditsolution.netlify.com/">About</a></li>
+    
+    <li><a href="https://rpubs.com/Stewartli">RPubs</a></li>
+    
+    <li><a href="https://github.com/stewartli">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/stewartli3">Twitter</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/stewart-li-30a11563/">Linkedin</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Audit Data Analytics Part2</h1>
+
+    
+    <span class="article-date">2019-11-18</span>
+    
+
+    <div class="article-content">
+      
+
+
+<p>This part covers audit procedures generally performed on sales and AR accounts.</p>
+<div id="digit-tests" class="section level3">
+<h3>Digit tests</h3>
+<p><strong>Duplicated JV No.</strong></p>
+<p>Same JV numbers (date, customer, amount) happen because of different memo.</p>
+<pre><code>  # A tibble: 90 x 2
+     num   `n()`
+     &lt;chr&gt; &lt;int&gt;
+   1 71047    10
+   2 71048     8
+   3 71049     9
+   4 71050     9
+   5 71051     6
+   6 71052    10
+   7 71053     4
+   8 71054     6
+   9 71055     6
+  10 71056     6
+  # ... with 80 more rows</code></pre>
+<pre><code>  # A tibble: 10 x 14
+        id account subaccount type  date       num   name  memo  split debit
+     &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+   1  2883 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Pear~ Acco~     0
+   2  2884 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Blac~ Acco~     0
+   3  2885 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Beve~ Acco~     0
+   4  2886 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Tiff~ Acco~     0
+   5  2887 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Burn~ Acco~     0
+   6  2888 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Spec~ Acco~     0
+   7  2889 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Pend~ Acco~     0
+   8  2890 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Vero~ Acco~     0
+   9  2891 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Halo~ Acco~     0
+  10  2892 Revenue Revenue    Invo~ 2018-01-06 71047 Bake~ Cand~ Acco~     0
+  # ... with 4 more variables: credit &lt;dbl&gt;, balance &lt;dbl&gt;, weekday &lt;ord&gt;,
+  #   month &lt;ord&gt;</code></pre>
+<p><strong>Same same same test (SSS)</strong></p>
+<pre><code>  # A tibble: 817 x 5
+  # Groups:   num, date, name [94]
+     num   date       name                                    credit  freq
+     &lt;chr&gt; &lt;date&gt;     &lt;chr&gt;                                    &lt;dbl&gt; &lt;int&gt;
+   1 71123 2018-11-29 Kern Lighting Warehouse:Store #13          0       3
+   2 71052 2018-02-27 Baker&#39;s Professional Lighting:Store #15  210       2
+   3 71064 2018-04-22 Godwin Lighting Depot:Store #404          75.6     2
+   4 71065 2018-03-26 Godwin Lighting Depot:Store #303          75.6     2
+   5 71066 2018-04-28 Godwin Lighting Depot:Store #909          75.6     2
+   6 71068 2018-05-10 Godwin Lighting Depot:Store #909          75.6     2
+   7 71069 2018-05-30 Godwin Lighting Depot:Store #1020         75.6     2
+   8 71070 2018-06-11 Godwin Lighting Depot:Store #303          75.6     2
+   9 71073 2018-08-31 Cole Home Builders:Phase 1 - Lot 5       270       2
+  10 71074 2018-08-24 Cole Home Builders:Phase 1 - Lot 5       270       2
+  # ... with 807 more rows</code></pre>
+<pre><code>  # A tibble: 2 x 14
+       id account subaccount type  date       num   name  memo  split debit
+    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt; &lt;date&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+  1  3010 Revenue Revenue    Invo~ 2018-02-27 71052 Bake~ Poli~ Acco~     0
+  2  3015 Revenue Revenue    Invo~ 2018-02-27 71052 Bake~ 2032~ Acco~     0
+  # ... with 4 more variables: credit &lt;dbl&gt;, balance &lt;dbl&gt;, weekday &lt;ord&gt;,
+  #   month &lt;ord&gt;</code></pre>
+<p><strong>Gap JV No.</strong></p>
+<p>There is no gap on JV numbers for the period.</p>
+<pre><code>  # A tibble: 0 x 15
+  # ... with 15 variables: id &lt;dbl&gt;, account &lt;chr&gt;, subaccount &lt;chr&gt;,
+  #   type &lt;chr&gt;, date &lt;date&gt;, num &lt;chr&gt;, name &lt;chr&gt;, memo &lt;chr&gt;,
+  #   split &lt;chr&gt;, debit &lt;dbl&gt;, credit &lt;dbl&gt;, balance &lt;dbl&gt;, weekday &lt;ord&gt;,
+  #   month &lt;ord&gt;, gap &lt;dbl&gt;</code></pre>
+<p><strong>Benford’s law</strong></p>
+<p>Includes methods such as first digit, first two digits, first three digits, second digit, last two digits, second order, summation. The first digit method is high level method. The first two digits method is the most useful one. The result of first two digits test is presented below.</p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre><code>  # A tibble: 29 x 6
+     date       num   name               memo                    debit credit
+     &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;chr&gt;                   &lt;dbl&gt;  &lt;dbl&gt;
+   1 2018-03-26 71065 Godwin Lighting D~ Drop Opal w/Solid Oak ~     0   75.6
+   2 2018-03-26 71065 Godwin Lighting D~ Cand. Light, 20 watts ~     0   75.6
+   3 2018-04-22 71064 Godwin Lighting D~ Drop Opal w/Solid Oak ~     0   75.6
+   4 2018-04-22 71064 Godwin Lighting D~ Cand. Light, 20 watts ~     0   75.6
+   5 2018-04-28 71066 Godwin Lighting D~ Drop Opal w/Solid Oak ~     0   75.6
+   6 2018-04-28 71066 Godwin Lighting D~ Cand. Light, 20 watts ~     0   75.6
+   7 2018-04-28 71067 Dan A. North Buil~ Fluorescent Lamp, T-12~     0   75  
+   8 2018-05-10 71068 Godwin Lighting D~ Drop Opal w/Solid Oak ~     0   75.6
+   9 2018-05-10 71068 Godwin Lighting D~ Cand. Light, 20 watts ~     0   75.6
+  10 2018-05-16 71095 Miscellaneous - R~ Pendant Bar, Cobblesto~     0   75  
+  # ... with 19 more rows</code></pre>
+<p><strong>Number duplication test (NDT)</strong></p>
+<p>Confirms to Benford’s law which concludes 75 is much suspicious than others.</p>
+<pre><code>  # A tibble: 78 x 2
+     first_two     n
+     &lt;chr&gt;     &lt;int&gt;
+   1 12           12
+   2 13            9
+   3 11            7
+   4 18            7
+   5 19            7
+   6 10            6
+   7 21            6
+   8 22            6
+   9 28            6
+  10 14            5
+  # ... with 68 more rows</code></pre>
+</div>
+<div id="sales-frequency-vs-amount" class="section level3">
+<h3>Sales frequency vs amount</h3>
+<p><strong>Sales calender by frequency</strong></p>
+<pre><code>       weekday
+  month Sun Mon Tue Wed Thu Fri Sat Sum
+    Jan  30   1   0  16   6   0  10  63
+    Feb  16  17  16   8   6   5   6  74
+    Mar   8  23  10   9   6   0   0  56
+    Apr  14  17  13   5   0   1  20  70
+    May   0   0   3  49  45  14  10 121
+    Jun  10  14  46   0  29  14   0 113
+    Jul   0  27  28   0  29  17   0 101
+    Aug   0   0   3   4   4  60   0  71
+    Sep   0   0  16   5   0  15   0  36
+    Oct   0  11   5   0   4   3   0  23
+    Nov   0  19   5   0  18  11   0  53
+    Dec   0  14   0   5   0   6  41  66
+    Sum  78 143 145 101 147 146  87 847</code></pre>
+<p><strong>Sales calender by frequency proportion</strong></p>
+<pre><code>       weekday
+  month  Sun  Mon  Tue  Wed  Thu  Fri  Sat  Sum
+    Jan 0.48 0.02 0.00 0.25 0.10 0.00 0.16 1.01
+    Feb 0.22 0.23 0.22 0.11 0.08 0.07 0.08 1.01
+    Mar 0.14 0.41 0.18 0.16 0.11 0.00 0.00 1.00
+    Apr 0.20 0.24 0.19 0.07 0.00 0.01 0.29 1.00
+    May 0.00 0.00 0.02 0.40 0.37 0.12 0.08 0.99
+    Jun 0.09 0.12 0.41 0.00 0.26 0.12 0.00 1.00
+    Jul 0.00 0.27 0.28 0.00 0.29 0.17 0.00 1.01
+    Aug 0.00 0.00 0.04 0.06 0.06 0.85 0.00 1.01
+    Sep 0.00 0.00 0.44 0.14 0.00 0.42 0.00 1.00
+    Oct 0.00 0.48 0.22 0.00 0.17 0.13 0.00 1.00
+    Nov 0.00 0.36 0.09 0.00 0.34 0.21 0.00 1.00
+    Dec 0.00 0.21 0.00 0.08 0.00 0.09 0.62 1.00</code></pre>
+<p><strong>Sales heatmap by frequency</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><strong>Amount vs Frequency</strong></p>
+<p>Sat on December and Fri on August stand out.</p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><strong>Monthly trend</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="reconcilaition" class="section level3">
+<h3>Reconcilaition</h3>
+<p><strong>Monthly sales</strong></p>
+<pre><code>   month monthly_sales
+     Jan      25506.80
+     Feb      25795.45
+     Mar      30483.40
+     Apr      32325.30
+     May      29839.45
+     Jun      31882.85
+     Jul      39460.25
+     Aug      31809.45
+     Sep      29191.40
+     Oct      28511.60
+     Nov      39128.00
+     Dec      67875.58
+   Total     411809.53</code></pre>
+<p><strong>AR balance as at YE</strong></p>
+<pre><code>  # A tibble: 6 x 4
+    name                                             debit credit     cf
+    &lt;chr&gt;                                            &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+  1 Baker&#39;s Professional Lighting:Store #10         12718.  2038  10680.
+  2 Baker&#39;s Professional Lighting:Store #15          3307   1885   1422 
+  3 Dan A. North Builders:Custom Order - Suite 100A  3500      0   3500 
+  4 Kern Lighting Warehouse:Store #13               37725  35502.  2222.
+  5 Lavery Lighting &amp; Design:Store #JL-08            3308.   600   2708.
+  6 Thompson Lighting Stores:Store #15              14825   3025  11800</code></pre>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,284 @@
+---
+title: Audit Data Analytics Part2
+author: ''
+date: '2019-11-18'
+slug: audit-data-analytics-part2
+categories: []
+tags: []
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = " ")
+
+library(tidyverse)
+library(lubridate)
+library(benford.analysis)
+library(directlabels)
+
+tb <- read_csv("C:/Users/Stewart Li/Dropbox/0. Stewart publication_Always updated/stdatascience/dsproject/auditworkpaper/data/gl.csv") %>% 
+  rename(id = X1) %>% 
+  select(-adj) %>% 
+  filter(!is.na(type)) %>% 
+  mutate(weekday = wday(date, label = TRUE),
+         month = month(date, label = TRUE))
+
+df_ar <- tb %>% 
+  filter(subaccount %in% c("Accounts Receivable", "Revenue"))
+```
+
+
+This part covers audit procedures generally performed on sales and AR accounts. 
+
+
+### Digit tests
+
+
+**Duplicated JV No.**
+
+
+Same JV numbers (date, customer, amount) happen because of different memo.
+
+
+```{r}
+d <- df_ar %>% filter(subaccount == "Revenue") 
+n_occur <- data.frame(table(d$num))
+d[d$num %in% n_occur$Var1[n_occur$Freq > 1], ] %>% 
+  group_by(num) %>% 
+  summarise(n())
+
+df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  filter(num == "71047") 
+```
+
+
+**Same same same test (SSS)**
+
+
+```{r}
+df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  group_by(num, date, name, credit) %>% 
+  summarise(freq = n()) %>% 
+  arrange(desc(freq))
+
+df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  filter(num == "71052", credit == 210)
+```
+
+
+**Gap JV No.**
+
+
+There is no gap on JV numbers for the period.
+
+
+```{r}
+df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  arrange(num) %>%
+  distinct(num, .keep_all = TRUE) %>% 
+  mutate(gap = as.numeric(num) - lag(as.numeric(num))) %>% 
+  filter(gap > 1)
+```
+
+
+**Benford's law** 
+
+
+Includes methods such as first digit, first two digits, first three digits, second digit, last two digits, second order, summation. The first digit method is high level method. The first two digits method is the most useful one. The result of first two digits test is presented below.
+
+
+```{r}
+bfd.cp <- benford((df_ar %>% filter(subaccount == "Revenue"))$credit, 
+                  number.of.digits = 2, 
+                  sign = "both", round = 3) 
+
+plot(bfd.cp) 
+
+getSuspects(bfd.cp, (df_ar %>% filter(subaccount == "Revenue")), 
+            by="absolute.diff", how.many = 1) %>% 
+  as_tibble() %>% 
+  select(c(5:8, 10:11))
+```
+
+
+**Number duplication test (NDT)** 
+
+
+Confirms to Benford's law which concludes 75 is much suspicious than others.
+
+
+```{r}
+df_ar %>% 
+  filter(subaccount == "Revenue", 
+         credit >= 10) %>% 
+  group_by(credit) %>% 
+  summarise(freq = n()) %>% 
+  mutate(first_two = sapply(credit, function(x) substring(x, first=c(1), last=c(2)))) %>% 
+  count(first_two, sort = TRUE)
+```
+
+
+### Sales frequency vs amount
+
+
+**Sales calender by frequency**
+
+
+```{r}
+with((df_ar %>% filter(subaccount == "Revenue")), table(month, weekday)) %>% addmargins()
+```
+
+
+**Sales calender by frequency proportion**
+
+
+```{r}
+with((df_ar %>% filter(subaccount == "Revenue")), table(month, weekday)) %>% 
+  prop.table(margin = 1) %>% 
+  round(2) %>% 
+  addmargins(2)
+```
+
+
+**Sales heatmap by frequency** 
+
+
+```{r}
+df_ar %>%
+  filter(subaccount == "Revenue") %>% 
+  group_by(month, weekday) %>%
+  count() %>% 
+  ggplot(aes(month, weekday, fill = n)) +
+  geom_tile(color = "#1D2024", size = 0.5, stat = "identity") +
+  scale_fill_viridis_c(option = "B") +
+  coord_equal() +
+  labs(x = "", 
+       y = "") +
+  theme(plot.background = element_rect(fill = "#1D2024", color = "#1D2024"),
+        panel.background = element_rect(fill = "#1D2024", color = "#1D2024"),
+        legend.background = element_rect(fill = "#1D2024", color = "#1D2024"),
+        text = element_text(color = "#FAFAFA"),
+        axis.text = element_text(color = "#FAFAFA"),
+        axis.text.x = element_text(vjust = 1),
+        panel.grid = element_blank(),
+        axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "right",
+        legend.title = element_blank())
+```
+
+
+**Amount vs Frequency**
+
+
+Sat on December and Fri on August stand out.
+
+
+```{r}
+df_ar %>%
+  filter(subaccount == "Revenue") %>% 
+  mutate(weekday = fct_relevel(weekday, rev(c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")))) %>%
+  group_by(weekday, month) %>%
+  summarise(freq = n(),
+            amt = sum(credit)) %>% 
+  gather(var, value, -c(weekday, month)) %>%
+  ggplot(aes(month, value)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::comma) + 
+  facet_grid(weekday ~ var, scales = "free_x") +
+  theme_light() +
+  labs(title = "Sales Amount vs Frequency",
+       x = "",
+       y = "")
+```
+
+
+**Monthly trend**
+
+
+```{r}
+df_ar %>% 
+  group_by(subaccount, month) %>% 
+  summarise_at(vars(debit, credit), sum) %>% 
+  mutate(amt = case_when(subaccount == "Accounts Receivable" ~ debit - credit,
+                         subaccount == "Revenue" ~ credit - debit)) %>% 
+  ggplot(aes(month, amt, color = subaccount)) +
+  geom_point(show.legend = FALSE) +
+  geom_path(aes(group = subaccount), show.legend = FALSE) +
+  geom_hline(yintercept = 0, lty = 2, col = "black", size = 1) +
+  scale_y_continuous(breaks = seq(-30000, 80000, 10000), labels = scales::comma_format()) +
+  geom_dl(aes(label = subaccount), method = list("smart.grid", cex = 0.6)) +
+  theme_light() +
+  labs(title = "Monthly movement for FY2018", 
+       caption = "RAudit Solution LLP | Stewart Li",
+       x = "",
+       y = "", 
+       color = "")
+```
+
+
+### Reconcilaition
+
+
+**Monthly sales**
+
+
+```{r}
+mth_sales <- df_ar %>% 
+  filter(subaccount == "Revenue") %>% 
+  group_by(month) %>% 
+  summarise(monthly_sales = sum(credit)) %>% 
+  janitor::adorn_totals()
+
+mth_sales
+```
+
+
+**AR balance as at YE**
+
+
+```{r}
+df_join <- df_ar %>% 
+  filter(subaccount == "Accounts Receivable") %>% 
+  mutate(amt = debit,
+         amt = ifelse(amt == 0, -credit, amt)) %>% 
+  group_by(num) %>% 
+  full_join(df_ar %>% 
+              filter(subaccount == "Revenue") %>% 
+              select(num, type, debit, credit) %>% 
+              group_by(num) %>% 
+              summarise(tdebit = sum(debit), 
+                        tcredit = sum(credit), 
+                        trans = n()), 
+            by = c("num")) %>% 
+  select(subaccount:split, amt, debit, credit, trans, tdebit, tcredit) %>%  
+  ungroup()
+
+df_join %>% 
+  group_by(name, type) %>% 
+  summarise_at(vars(tdebit, tcredit, trans, debit, credit), sum) %>% 
+  summarise_at(vars(debit, credit), sum) %>% 
+  mutate(cf = debit - credit) %>% 
+  filter(cf != 0)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

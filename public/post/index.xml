@@ -6,10 +6,33 @@
     <description>Recent content in Posts on RAudit Solution LLP</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 16 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 18 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Audit Data Analytics Part2</title>
+      <link>/2019/11/18/audit-data-analytics-part2/</link>
+      <pubDate>Mon, 18 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/11/18/audit-data-analytics-part2/</guid>
+      <description>This part covers audit procedures generally performed on sales and AR accounts.
+Digit testsDuplicated JV No.
+Same JV numbers (date, customer, amount) happen because of different memo.
+ # A tibble: 90 x 2num `n()`&amp;lt;chr&amp;gt; &amp;lt;int&amp;gt;1 71047 102 71048 83 71049 94 71050 95 71051 66 71052 107 71053 48 71054 69 71055 610 71056 6# .</description>
+    </item>
+    
+    <item>
+      <title>Audit Data Analytics Part3</title>
+      <link>/2019/11/18/audit-data-analytics-part3/</link>
+      <pubDate>Mon, 18 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/11/18/audit-data-analytics-part3/</guid>
+      <description>This part covers audit procedures generally performed on sales customers.
+Sales summary table by customers and months
+ # A tibble: 10 x 7# Groups: name [8]name month freq credit pct cum_amt cum_pct&amp;lt;chr&amp;gt; &amp;lt;ord&amp;gt; &amp;lt;int&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;1 Baker&amp;#39;s Professional Lighting~ Feb 7 2391 1 2391 1 2 Baker&amp;#39;s Professional Lighting~ May 7 2038 0.160 2038 0.160 3 Baker&amp;#39;s Professional Lighting~ Dec 6 10680. 0.</description>
+    </item>
     
     <item>
       <title>Audit Data Analytics Part1</title>

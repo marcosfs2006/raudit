@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Audit Data Analytics Part3 - RAudit Solution LLP</title>
+<meta property="og:title" content="Audit Data Analytics Part3 - RAudit Solution LLP">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="https://rauditsolution.netlify.com/">About</a></li>
+    
+    <li><a href="https://rpubs.com/Stewartli">RPubs</a></li>
+    
+    <li><a href="https://github.com/stewartli">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/stewartli3">Twitter</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/stewart-li-30a11563/">Linkedin</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Audit Data Analytics Part3</h1>
+
+    
+    <span class="article-date">2019-11-18</span>
+    
+
+    <div class="article-content">
+      
+
+
+<p>This part covers audit procedures generally performed on sales customers.</p>
+<p><strong>Sales summary table by customers and months</strong></p>
+<pre><code>  # A tibble: 10 x 7
+  # Groups:   name [8]
+     name                           month  freq credit    pct cum_amt cum_pct
+     &lt;chr&gt;                          &lt;ord&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+   1 Baker&#39;s Professional Lighting~ Feb       7  2391  1        2391   1     
+   2 Baker&#39;s Professional Lighting~ May       7  2038  0.160    2038   0.160 
+   3 Baker&#39;s Professional Lighting~ Dec       6 10680. 0.840   12718.  1     
+   4 Baker&#39;s Professional Lighting~ Feb      10  1885  0.570    1885   0.570 
+   5 Baker&#39;s Professional Lighting~ Dec       7  1422  0.430    3307   1     
+   6 Baker&#39;s Professional Lighting~ Mar       8  1872  1        1872   1     
+   7 Baker&#39;s Professional Lighting~ Jan      10  2381  1        2381   1     
+   8 Cole Home Builders:Phase 1 - ~ Feb      17  2187. 1        2187.  1     
+   9 Cole Home Builders:Phase 1 - ~ May      17  2187. 1        2187.  1     
+  10 Cole Home Builders:Phase 1 - ~ Apr      17  2187. 0.0845   2187.  0.0845</code></pre>
+<p><strong>Month over month sales by customers</strong></p>
+<pre><code>  # A tibble: 28 x 4
+  # Groups:   name [14]
+     yearmonth name                                    monthlysales   mom
+     &lt;chr&gt;     &lt;chr&gt;                                          &lt;dbl&gt; &lt;dbl&gt;
+   1 2018-12   Baker&#39;s Professional Lighting:Store #10       10680. 424. 
+   2 2018-12   Lavery Lighting &amp; Design:Store #JL-08          2708. 351. 
+   3 2018-12   Thompson Lighting Stores:Store #15            11800  290. 
+   4 2018-06   Cole Home Builders:Phase 1 - Lot 5             5834. 256. 
+   5 2018-02   Cole Home Builders:Phase 2 - Lot 5             4364   99.5
+   6 2018-04   Godwin Lighting Depot:Store #202               1688. -78.3
+   7 2018-07   Cole Home Builders:Phase 1 - Lot 5             9803.  68  
+   8 2018-06   Kern Lighting Warehouse:Store #45             14175   66.8
+   9 2018-05   Cole Home Builders:Phase 2 - Lot 5             1637. -62.5
+  10 2018-11   Kern Lighting Warehouse:Store #01              9839  -60.8
+  # ... with 18 more rows</code></pre>
+<p><strong>Relative Size Factor test (RSF)</strong></p>
+<p>Could also include mean computed without the first larget number to help you decide relevant RSF score. Here, 0.6 is the chosen cut-off.</p>
+<pre><code>  # A tibble: 43 x 5
+  # Groups:   name [43]
+     date       num   name               memo                             rsf
+     &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;              &lt;chr&gt;                          &lt;dbl&gt;
+   1 2018-02-14 71110 Baker&#39;s Professio~ River Rock (8/60 watt)  Faux ~ 0.706
+   2 2018-12-07 71138 Baker&#39;s Professio~ Fluorescent Lamp, Medium Bipi~ 0.945
+   3 2018-03-11 71048 Baker&#39;s Professio~ Polished Brass Pendant, 1-100~ 0.778
+   4 2018-01-06 71047 Baker&#39;s Professio~ Pearl Nickle, 5 Light, Medium~ 0.95 
+   5 2018-02-12 71088 Cole Home Builder~ Pearl Nickle, 5 Light, Medium~ 0.931
+   6 2018-05-24 71086 Cole Home Builder~ Pearl Nickle, 5 Light, Medium~ 0.931
+   7 2018-06-07 71085 Cole Home Builder~ Die Cast Lanterns, Black, 1-1~ 1    
+   8 2018-08-22 71109 Dan A. North Buil~ Tapestry, (2-60 watt Med), Et~ 0.9  
+   9 2018-04-28 71067 Dan A. North Buil~ Beveled Mirror, Etched Ribbed~ 0.807
+  10 2018-05-30 71069 Godwin Lighting D~ Verona Collection, Pendant, C~ 0.923
+  # ... with 33 more rows</code></pre>
+<p><strong>Top 10 customers</strong></p>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:right;">
+name
+</th>
+<th style="text-align:right;">
+amt
+</th>
+<th style="text-align:right;">
+freq
+</th>
+<th style="text-align:right;">
+pct
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+Other
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 100.00%">$166,063</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 100.00%">440</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 100.00%">40%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Kern Lighting Warehouse:Store #13
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 22.72%">$37,725</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 7.27%">32</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 22.50%">9%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Kern Lighting Warehouse:Store #01
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 21.03%">$34,929</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 4.55%">20</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 20.00%">8%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Kern Lighting Warehouse:Store #34
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 20.85%">$34,625</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 4.77%">21</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 20.00%">8%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Kern Lighting Warehouse:Store #45
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 18.47%">$30,675</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 3.64%">16</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 17.50%">7%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Cole Home Builders:Phase 1 - Lot 5
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 15.58%">$25,877</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 44.55%">196</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 15.00%">6%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Stern Commercial Contractor’s:Walker Properties
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 12.84%">$21,330</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 1.14%">5</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 12.50%">5%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Stern Commercial Contractor’s:Tittle Properties
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 10.50%">$17,433</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 1.36%">6</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 10.00%">4%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Thompson Lighting Stores:Store #15
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 8.93%">$14,825</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 6.14%">27</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 10.00%">4%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Stern Commercial Contractor’s:Wilson Suites
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 8.64%">$14,355</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 0.68%">3</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 7.50%">3%</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+Cole Home Builders:Phase 2 - Lot 5
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: #FA614B; width: 8.41%">$13,973</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: pink; width: 18.41%">81</span>
+</td>
+<td style="text-align:right;">
+<span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightpink; width: 7.50%">3%</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Customer churn analysis (RFM)</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part3_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>Sales outliers</strong></p>
+<p><img src="/post/2019-11-18-audit-data-analytics-part3_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
