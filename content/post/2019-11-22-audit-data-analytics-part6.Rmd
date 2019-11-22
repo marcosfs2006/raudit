@@ -1,0 +1,190 @@
+---
+title: Audit Data Analytics Part6
+author: ''
+date: '2019-11-22'
+slug: audit-data-analytics-part6
+categories: []
+tags: []
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = " ")
+
+library(tidyverse)
+library(rlang)
+library(lubridate)
+library(leaps)
+library(car)
+
+tb <- read_csv("C:/Users/Stewart Li/Dropbox/0. Stewart publication_Always updated/stdatascience/dsproject/auditworkpaper/data/gl.csv") %>% 
+  rename(id = X1) %>% 
+  select(-adj) %>% 
+  filter(!is.na(type)) %>% 
+  mutate(weekday = wday(date, label = TRUE),
+         month = month(date, label = TRUE))
+
+df_ar <- tb %>% 
+  filter(subaccount %in% c("Accounts Receivable", "Revenue"))
+
+pl <- unique(tb$subaccount)[19:62] %>% dput
+df_pl <-tb %>% 
+  filter(subaccount %in% pl, 
+         !subaccount %in% c("Mileage", "Employee Bonus", "Sick/Holiday & Vacation Pay")) %>% 
+  group_by(date, subaccount) %>% 
+  summarise_at(vars(debit, credit), sum) %>% 
+  mutate(amt = abs(credit - debit)) %>% 
+  select(date, subaccount, amt) %>% 
+  pivot_wider(names_from = subaccount, values_from = amt) %>% 
+  replace(is.na(.), 0) %>% 
+  select(date, Revenue, everything()) %>% 
+  ungroup() %>% 
+  janitor::clean_names()
+
+df_model <- df_pl %>% 
+  select(c("revenue", "purchases_cost_of_goods", "wages_sales_inside", 
+           "payroll_tax_expenses", "wages_office_staff", "wages_warehouse", 
+           "conferences_and_seminars", "supplies", "dues_and_subscriptions", 
+           "interest_expense", "maintenance_janitorial", "accounting_fees"))
+```
+
+
+This part covers linear regression. Non-linear relationship between dependent variable and predictors will not be explored here. Target variable is not transformed due to many 0 in the dataset.
+
+
+### Backward stepwise regression
+
+
+Three predictors selected by backward stepwise are purchases cost of goods, wages sales inside, and wages warehouse.
+
+
+```{r}
+leaps::regsubsets(revenue ~., data = df_model, nbest = 1, nvmax = 3, method = "backward")
+# car::subsets(leaps, statistic = "bic")
+```
+
+
+### Linear regression
+
+
+model_lm2 is selected after compared four lm models. 
+
+* model_lm vs model_lm1: no siginificant difference. One predictor (purchase) is sufficient.     
+* model_lm1 vs model_lm2: agrees to backward stepwise. Additional two predictors have some impact on target.
+* model_lm1 vs model_lm3: different from random forest. Suggest interest expense and accoutning fees are not important.
+* model_lm2 vs model_lm3: different from random forest. Interaction is not impactful.
+
+
+```{r}
+model_lm <- lm(revenue ~ ., data = df_model) 
+model_lm1 <- lm(revenue ~ purchases_cost_of_goods, data = df_model) 
+model_lm2 <- lm(revenue ~ purchases_cost_of_goods + wages_sales_inside + wages_warehouse, data = df_model) 
+model_lm3 <- lm(revenue ~ purchases_cost_of_goods*interest_expense + accounting_fees, data = df_model) 
+
+# anova(model_lm, model_lm1)
+anova(model_lm1, model_lm2)
+anova(model_lm1, model_lm3)
+anova(model_lm2, model_lm3)
+
+# summary(model_lm2)
+confint(model_lm2, level = 0.9)
+
+par(mfrow=c(3,2))
+plot(model_lm2, which = 1:6) 
+par(mfrow=c(1,1))
+```
+
+
+### Model diagnostic
+
+
+**Assumptions** 
+
+
+```{r}
+gvmodel <- gvlma::gvlma(model_lm2)
+summary(gvmodel)
+```
+
+
+**Outliers**
+
+
+```{r}
+outlierTest(model_lm2) # Bonferonni p-value for most extreme obs
+leveragePlots(model_lm2) # leverage plots
+```
+
+
+**Influential Observations**
+
+
+```{r}
+avPlots(model_lm2, ask = F, onepage = T, id.method = "identify") # added variable plots 
+
+influencePlot(model_lm2, 
+              id.method="identify", 
+              main="Influence Plot", 
+              sub="Circle size is proportial to Cook's Distance")
+```
+
+
+**Normality of Residuals**
+
+
+```{r}
+# qqPlot(model_lm2, labels = row.names(df_model), id.method = "identify",
+#        simulate = T, main = "Q-Q Plot") 
+
+lag.plot(model_lm2$residuals, lags = 1, do.lines = F, labels = F)
+
+hist(MASS::studres(model_lm2), 
+     freq = FALSE, 
+     main = "Distribution of Studentized Residuals")
+```
+
+
+**Homoscedasticity**
+
+
+```{r}
+spreadLevelPlot(model_lm2)
+```
+
+
+**Multicollinearity**
+
+
+kappa and vif are;
+
+
+```{r}
+kappa(cor(df_model[-1]), exact = TRUE)
+vif(model_lm2) # compare to 1, 4, 10
+mean(vif(model_lm2))  #Is the mean VIF much bigger than 1?
+sqrt(vif(model_lm2)) > 2 # problem
+```
+
+
+**Nonlinearity**
+
+
+```{r}
+crPlots(model_lm2) # component + residual plot 
+linearHypothesis(model_lm2, c("purchases_cost_of_goods=0", "wages_sales_inside=0"), white.adjust = "hc1")
+```
+
+
+**Autocorrelation**
+
+
+```{r}
+durbinWatsonTest(model_lm2, simulate = F) 
+```
+
+
+
+
+
+
+

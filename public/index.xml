@@ -24,6 +24,17 @@ PCA model agrees to the above result. PCA1 and PCA2 totally explain 50% of the d
     </item>
     
     <item>
+      <title>Audit Data Analytics Part6</title>
+      <link>/2019/11/22/audit-data-analytics-part6/</link>
+      <pubDate>Fri, 22 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/11/22/audit-data-analytics-part6/</guid>
+      <description>This part covers linear regression. Non-linear relationship between dependent variable and predictors will not be explored here. Target variable is not transformed due to many 0 in the dataset.
+Backward stepwise regressionThree predictors selected by backward stepwise are purchases cost of goods, wages sales inside, and wages warehouse.
+ Subset selection objectCall: regsubsets.formula(revenue ~ ., data = df_model, nbest = 1, nvmax = 3, method = &amp;quot;backward&amp;quot;)11 Variables (and intercept)Forced in Forced outpurchases_cost_of_goods FALSE FALSEwages_sales_inside FALSE FALSEpayroll_tax_expenses FALSE FALSEwages_office_staff FALSE FALSEwages_warehouse FALSE FALSEconferences_and_seminars FALSE FALSEsupplies FALSE FALSEdues_and_subscriptions FALSE FALSEinterest_expense FALSE FALSEmaintenance_janitorial FALSE FALSEaccounting_fees FALSE FALSE1 subsets of each size up to 3Selection Algorithm: backwardLinear regressionmodel_lm2 is selected after compared four lm models.</description>
+    </item>
+    
+    <item>
       <title>Audit Data Analytics Part2</title>
       <link>/2019/11/18/audit-data-analytics-part2/</link>
       <pubDate>Mon, 18 Nov 2019 00:00:00 +0000</pubDate>
