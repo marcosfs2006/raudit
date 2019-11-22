@@ -1,0 +1,213 @@
+---
+title: Audit Data Analytics Part5
+author: ''
+date: '2019-11-22'
+slug: audit-data-analytics-part5
+categories: []
+tags: []
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, error = FALSE, comment = " ")
+
+library(tidyverse)
+library(rlang)
+library(lubridate)
+library(randomForest)
+library(iml)
+
+tb <- read_csv("C:/Users/Stewart Li/Dropbox/0. Stewart publication_Always updated/stdatascience/dsproject/auditworkpaper/data/gl.csv") %>% 
+  rename(id = X1) %>% 
+  select(-adj) %>% 
+  filter(!is.na(type)) %>% 
+  mutate(weekday = wday(date, label = TRUE),
+         month = month(date, label = TRUE))
+
+df_ar <- tb %>% 
+  filter(subaccount %in% c("Accounts Receivable", "Revenue"))
+
+pl <- unique(tb$subaccount)[19:62] %>% dput
+df_pl <-tb %>% 
+  filter(subaccount %in% pl, 
+         !subaccount %in% c("Mileage", "Employee Bonus", "Sick/Holiday & Vacation Pay")) %>% 
+  group_by(date, subaccount) %>% 
+  summarise_at(vars(debit, credit), sum) %>% 
+  mutate(amt = abs(credit - debit)) %>% 
+  select(date, subaccount, amt) %>% 
+  pivot_wider(names_from = subaccount, values_from = amt) %>% 
+  replace(is.na(.), 0) %>% 
+  select(date, Revenue, everything()) %>% 
+  ungroup() %>% 
+  janitor::clean_names()
+
+df_model <- df_pl %>% 
+  select(c("revenue", "purchases_cost_of_goods", "wages_sales_inside", 
+           "payroll_tax_expenses", "wages_office_staff", "wages_warehouse", 
+           "conferences_and_seminars", "supplies", "dues_and_subscriptions", 
+           "interest_expense", "maintenance_janitorial", "accounting_fees"))
+```
+
+
+This part covers features selection. Target variable is revenue. 
+
+
+### Principal Component Analysis (PCA)
+
+
+Quickly running the statistical method suggests that four PCA should be selected as their variance is more than one.  
+
+
+```{r}
+df_pca <- df_model[-1] 
+psych::scree(df_pca)
+```
+
+
+PCA model agrees to the above result. PCA1 and PCA2 totally explain 50% of the data. 
+
+
+```{r}
+pca <- prcomp(df_pca, center = TRUE, scale = TRUE) 
+
+summary(pca)
+pca$sdev^2
+plot(pca, type = "l")
+```
+
+
+The following shows how predictors are attributable to PCA1 and PCA2. PCA1 is about the cost of goods sold. PCA2 is about training expenses.
+
+
+```{r}
+pca$rotation[,1:2] %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  gather(pcas, value, -rowname) %>% 
+  mutate(rowname = fct_reorder(rowname, value)) %>% 
+  ggplot(aes(value, rowname)) +
+  geom_point() +
+  facet_wrap(~pcas) + 
+  theme_light() +
+  labs(x ="", 
+       y = "")
+```
+
+
+```{r}
+cor(df_pca, pca$x[, 1:2])
+```
+
+
+Scatterplot for all observations based on PCA1 and PCA2. 
+
+
+```{r}
+cbind(df_pca, pca$x[, 1:2]) %>%
+  ggplot(aes(PC1, PC2)) +
+  stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) +
+  geom_point(shape = 21, col = "black") + 
+  theme_light()
+```
+
+
+### K-means clustering
+
+
+Try K to be 4 and 5. Compute the centroid of target variable based on four clusters. Three outliers identified by PCA appear again.
+
+
+```{r}
+fitk4 <- kmeans(scale(df_model[-1]), centers = 4, nstart = 10) 
+fitk5 <- kmeans(scale(df_model[-1]), centers = 5, nstart = 10) 
+
+mydata <- data.frame(scale(df_model[-1]), fitk4$cluster)
+aggregate(df_model[1], by = list(cluster = fitk4$cluster), mean)
+
+set.seed(1234)
+cluster::clusplot(mydata, fitk4$cluster, color=TRUE, shade=TRUE, labels=2, lines=0)
+```
+
+
+Plot K clusters along with PCA. 
+
+
+```{r}
+df_clustree <- data.frame(scale(df_model), fitk4$cluster, fitk5$cluster, pca$x) %>% 
+  select(1:12, K4 = fitk4.cluster, K5 = fitk5.cluster, everything())
+
+overlay_list <- clustree::clustree_overlay(df_clustree, prefix = "K", 
+                                 x_value = "PC1", y_value = "PC2", 
+                                 plot_sides = TRUE)
+
+overlay_list$x_side
+```
+
+
+### Hierarchical clustering
+
+
+```{r}
+d <- dist(df_model[-1]) # dist methods
+fith <- hclust(d, "ward.D2")
+plot(fith, hang = -1, cex = .8)
+rect.hclust(fith, k = 4, border = "red")
+```
+
+
+### Random forest
+
+
+Decision tree is not powerful enough to identify those important variables. Thus, random forest is used.
+
+
+```{r}
+model_rf <- randomForest(revenue ~ ., 
+                        data = df_model, 
+                        ntree = 50, 
+                        mtry = 2, 
+                        keep.forest = TRUE, 
+                        importance = TRUE)
+
+importance(model_rf) %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  select(variables = rowname, mse = `%IncMSE`) %>% 
+  mutate(variables = fct_reorder(variables, mse)) %>% 
+  ggplot(aes(variables, mse, fill = mse)) +
+  geom_bar(stat = 'identity') +
+  coord_flip() +
+  theme_light() +
+  theme(legend.position="none") + 
+  labs(title = "Important variables",
+       x = 'Variables', 
+       y= '% increase MSE if variable is randomly permuted') 
+```
+
+
+Feature importantance based on rmse.
+
+
+```{r}
+predictor <- Predictor$new(model = model_rf, 
+                           data = df_model[-1], 
+                           y = df_model$revenue, 
+                           predict.fun = predict,
+                           class = "regression")
+
+imp_rf <- FeatureImp$new(predictor, loss = "rmse")
+plot(imp_rf) + theme_light()
+```
+
+
+Interaction effect among predictors.
+
+
+```{r}
+interactions <- Interaction$new(predictor, feature = "purchases_cost_of_goods")
+plot(interactions) + theme_light()
+```
+
+
+
+

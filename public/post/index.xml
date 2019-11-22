@@ -6,10 +6,22 @@
     <description>Recent content in Posts on RAudit Solution LLP</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 22 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Audit Data Analytics Part5</title>
+      <link>/2019/11/22/audit-data-analytics-part5/</link>
+      <pubDate>Fri, 22 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/11/22/audit-data-analytics-part5/</guid>
+      <description>This part covers features selection. Target variable is revenue.
+Principal Component Analysis (PCA)Quickly running the statistical method suggests that four PCA should be selected as their variance is more than one.
+PCA model agrees to the above result. PCA1 and PCA2 totally explain 50% of the data.
+ Importance of components:PC1 PC2 PC3 PC4 PC5 PC6 PC7Standard deviation 1.7685 1.4583 1.2553 1.0853 0.95570 0.86823 0.71936Proportion of Variance 0.</description>
+    </item>
     
     <item>
       <title>Audit Data Analytics Part2</title>
